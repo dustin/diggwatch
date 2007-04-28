@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>spy</groupId>
 			<artifactId>jwebkit</artifactId>
-			<version>SNAPSHOT</version>
+			<version>3.0.1</version>
 			<properties><war.bundle>true</war.bundle></properties>
 		</dependency>
 		<dependency>
@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>spy</groupId>
 			<artifactId>digg</artifactId>
-			<version>SNAPSHOT</version>
+			<version>1.1</version>
 			<properties><war.bundle>true</war.bundle></properties>
 		</dependency>
 		<dependency>
