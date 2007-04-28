@@ -33,8 +33,8 @@ public class CommentRSSServlet extends XMLOutputServlet {
 
 	private void processUser(String user, HttpServletResponse res)
 		throws Exception {
-		sendXml(new CommentFeed(user, new CommentFetcher().getComments(user)),
-				res);
+		sendXml(new CommentFeed(user,
+				DiggInterface.getInstance().getRelevantComments(user)), res);
 	}
 
 }

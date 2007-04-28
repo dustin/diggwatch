@@ -43,7 +43,8 @@ public class CommentsDisplayServlet extends JWHttpServlet {
 	private void processUser(String u, HttpServletRequest req,
 			HttpServletResponse res) throws Exception {
 		req.setAttribute("username", u);
-		Collection<Comment> comments = new CommentFetcher().getComments(u);
+		Collection<Comment> comments =
+			DiggInterface.getInstance().getRelevantComments(u);
 		if(comments.isEmpty()) {
 			req.getRequestDispatcher("/nocomments.jsp").forward(req, res);
 		} else {
