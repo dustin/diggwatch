@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.spy.digg.Comment;
+import net.spy.digg.DiggException;
 import net.spy.digg.Story;
 import net.spy.jwebkit.JWHttpServlet;
 
@@ -46,18 +47,30 @@ public class CommentsDisplayServlet extends JWHttpServlet {
 		if(comments.isEmpty()) {
 			req.getRequestDispatcher("/nocomments.jsp").forward(req, res);
 		} else {
-			req.setAttribute("comments", comments);
 			Map<Integer, Story> stories=new HashMap<Integer, Story>();
 			DiggInterface di=DiggInterface.getInstance();
 			for(Comment c : comments) {
 				if(!stories.containsKey(c.getStoryId())) {
-					stories.put(c.getStoryId(), di.getStory(c.getStoryId()));
+					try {
+						stories.put(c.getStoryId(),
+							di.getStory(c.getStoryId()));
+					} catch(DiggException e) {
+						getLogger().warn(
+							"Error fetching story %d (skipping it)",
+								c.getStoryId(), e);
+						// XXX:  Magic number, 1008 == no such story
+						if(e.getErrorId() != 1008) {
+							throw e;
+						}
+					}
 				}
 			}
-			req.setAttribute("stories", stories);
 			List<StoryComment> sc=new ArrayList<StoryComment>(comments.size());
 			for(Comment c : comments) {
-				sc.add(new StoryComment(stories.get(c.getStoryId()), c));
+				// Skip broken stories.
+				if(stories.containsKey(c.getStoryId())) {
+					sc.add(new StoryComment(stories.get(c.getStoryId()), c));
+				}
 			}
 			req.setAttribute("storyComments", sc);
 			Collections.reverse(sc);

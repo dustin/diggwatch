@@ -6,6 +6,7 @@ import java.util.Collection;
 import net.spy.SpyObject;
 import net.spy.digg.Comment;
 import net.spy.digg.Digg;
+import net.spy.digg.DiggException;
 import net.spy.digg.EventParameters;
 import net.spy.digg.PagedItems;
 import net.spy.digg.PagingParameters;
@@ -22,14 +23,16 @@ public class DiggInterface extends SpyObject {
 
 	// How long to cache user comments.
 	private static final int USER_COMMENTS_TIME = 900;
-	// How long stories are cached
-	private static final int STORY_TIME = 86400;
+	// How long stories are cached.
+	private static final int STORY_TIME = 86400*14;
+	// How long we negatively cache stories
+	private static final int NEG_STORY_TIME = STORY_TIME/2;
 	// How long incremental comments are cached
-	private static final int MIN_COMMENT_REPLY_TIME = 60;
+	private static final int MIN_COMMENT_REPLY_TIME = 180;
 	private static final int MAX_COMMENT_REPLY_TIME = 3600*12;
 
 	// How far back to go for user comments (ms). (two weeks should be enough)
-	private static final long MIN_COMMENT_AGE = 86000*14*1000;
+	private static final long MIN_COMMENT_AGE = STORY_TIME*1000;
 
 	private static DiggInterface instance=null;
 
@@ -90,10 +93,20 @@ public class DiggInterface extends SpyObject {
 	 */
 	public Story getStory(int storyId) throws Exception {
 		String key="digg/story/" + storyId;
-		Story rv=(Story) mc.get(key);
+		Object o=mc.get(key);
+		// The exceptions get memoized into the cache.
+		if(o instanceof DiggException) {
+			throw (DiggException)o;
+		}
+		Story rv=(Story)o;
 		if(rv == null) {
-			rv=digg.getStory(storyId);
-			mc.set(key, STORY_TIME, rv);
+			try {
+				rv=digg.getStory(storyId);
+				mc.set(key, STORY_TIME, rv);
+			} catch(DiggException e) {
+				mc.set(key, NEG_STORY_TIME, e);
+				throw e;
+			}
 		}
 		return rv;
 	}

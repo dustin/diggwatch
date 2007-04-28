@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import net.spy.digg.Comment;
+import net.spy.digg.DiggException;
 import net.spy.digg.Story;
 import net.spy.jwebkit.rss.RSSChannel;
 import net.spy.jwebkit.rss.RSSItem;
@@ -30,8 +31,17 @@ public class CommentFeed extends RSSChannel {
 		DiggInterface di=DiggInterface.getInstance();
 		for(Comment c : comments) {
 			try {
-				rv.add(new CommentAdaptor(user, di.getStory(c.getStoryId()),
-						c));
+				try {
+					Story s=di.getStory(c.getStoryId());
+					rv.add(new CommentAdaptor(user, s, c));
+				} catch(DiggException e) {
+					getLogger().warn("Error fetching story %d (skipping it)",
+						c.getStoryId(), e);
+					// XXX:  magic number.  1008 == no such story
+					if(e.getErrorId() != 1008) {
+						throw e;
+					}
+				}
 			} catch (Exception e) {
 				throw new RuntimeException("Error making feed", e);
 			}
