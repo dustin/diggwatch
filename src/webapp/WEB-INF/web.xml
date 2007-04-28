@@ -15,9 +15,27 @@
 		<servlet-class>net.spy.diggwatch.CommentRSSServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>commentDisplay</servlet-name>
+		<servlet-class>net.spy.diggwatch.CommentsDisplayServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>userRedir</servlet-name>
+		<servlet-class>net.spy.diggwatch.CommentsRedirectServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>commentRss</servlet-name>
 		<url-pattern>/rss/comments/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>commentDisplay</servlet-name>
+		<url-pattern>/comments/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>userRedir</servlet-name>
+		<url-pattern>/cr</url-pattern>
 	</servlet-mapping>
 </web-app>

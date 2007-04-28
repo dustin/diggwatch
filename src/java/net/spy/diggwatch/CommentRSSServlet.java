@@ -18,7 +18,7 @@ public class CommentRSSServlet extends XMLOutputServlet {
 	throws ServletException, IOException {
 		String pi=req.getPathInfo();
 		if(pi == null || pi.length() == 0 || pi.equals("/")) {
-			// some sort of index thing
+			// some sort of index thing?
 			throw new ServletException("No username.");
 		} else {
 			assert pi.startsWith("/");

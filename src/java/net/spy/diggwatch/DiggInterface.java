@@ -22,11 +22,12 @@ public class DiggInterface extends SpyObject {
 	// How long to cache user comments.
 	private static final int USER_COMMENTS_TIME = 900;
 	// How long stories are cached
-	private static final int STORY_TIME = 3600*12;
+	private static final int STORY_TIME = 86400;
 	// How long incremental comments are cached
 	private static final int MIN_COMMENT_REPLY_TIME = 60;
 	private static final int MAX_COMMENT_REPLY_TIME = 3600*12;
-	// How far back to go for user comments. (one week should be enough)
+
+	// How far back to go for user comments (ms). (one week should be enough)
 	private static final long MIN_COMMENT_AGE = 86000*7*1000;
 
 	private static DiggInterface instance=null;
