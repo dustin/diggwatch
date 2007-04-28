@@ -43,23 +43,28 @@ public class CommentsDisplayServlet extends JWHttpServlet {
 			HttpServletResponse res) throws Exception {
 		req.setAttribute("username", u);
 		Collection<Comment> comments = new CommentFetcher().getComments(u);
-		req.setAttribute("comments", comments);
-		Map<Integer, Story> stories=new HashMap<Integer, Story>();
-		DiggInterface di=DiggInterface.getInstance();
-		for(Comment c : comments) {
-			if(!stories.containsKey(c.getStoryId())) {
-				stories.put(c.getStoryId(), di.getStory(c.getStoryId()));
+		if(comments.isEmpty()) {
+			req.getRequestDispatcher("/nocomments.jsp").forward(req, res);
+		} else {
+			req.setAttribute("comments", comments);
+			Map<Integer, Story> stories=new HashMap<Integer, Story>();
+			DiggInterface di=DiggInterface.getInstance();
+			for(Comment c : comments) {
+				if(!stories.containsKey(c.getStoryId())) {
+					stories.put(c.getStoryId(), di.getStory(c.getStoryId()));
+				}
 			}
+			req.setAttribute("stories", stories);
+			List<StoryComment> sc=new ArrayList<StoryComment>(comments.size());
+			for(Comment c : comments) {
+				sc.add(new StoryComment(stories.get(c.getStoryId()), c));
+			}
+			req.setAttribute("storyComments", sc);
+			Collections.reverse(sc);
+			getLogger().info("storiesComments: %s", sc);
+
+			req.getRequestDispatcher("/comments.jsp").forward(req, res);
 		}
-		req.setAttribute("stories", stories);
-		List<StoryComment> sc=new ArrayList<StoryComment>(comments.size());
-		for(Comment c : comments) {
-			sc.add(new StoryComment(stories.get(c.getStoryId()), c));
-		}
-		req.setAttribute("storyComments", sc);
-		Collections.reverse(sc);
-		getLogger().info("storiesComments: %s", sc);
-		req.getRequestDispatcher("/comments.jsp").forward(req, res);
 	}
 
 	public static class StoryComment {
