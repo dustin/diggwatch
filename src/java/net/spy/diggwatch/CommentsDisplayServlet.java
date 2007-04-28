@@ -61,7 +61,6 @@ public class CommentsDisplayServlet extends JWHttpServlet {
 			}
 			req.setAttribute("storyComments", sc);
 			Collections.reverse(sc);
-			getLogger().info("storiesComments: %s", sc);
 
 			req.getRequestDispatcher("/comments.jsp").forward(req, res);
 		}
