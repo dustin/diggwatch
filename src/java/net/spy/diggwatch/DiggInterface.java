@@ -7,6 +7,7 @@ import net.spy.SpyObject;
 import net.spy.digg.Comment;
 import net.spy.digg.Digg;
 import net.spy.digg.EventParameters;
+import net.spy.digg.PagedItems;
 import net.spy.digg.PagingParameters;
 import net.spy.digg.Story;
 import net.spy.memcached.AddrUtil;
@@ -27,8 +28,8 @@ public class DiggInterface extends SpyObject {
 	private static final int MIN_COMMENT_REPLY_TIME = 60;
 	private static final int MAX_COMMENT_REPLY_TIME = 3600*12;
 
-	// How far back to go for user comments (ms). (one week should be enough)
-	private static final long MIN_COMMENT_AGE = 86000*7*1000;
+	// How far back to go for user comments (ms). (two weeks should be enough)
+	private static final long MIN_COMMENT_AGE = 86000*14*1000;
 
 	private static DiggInterface instance=null;
 
@@ -63,14 +64,22 @@ public class DiggInterface extends SpyObject {
 	/**
 	 * Get the comments for the given user.
 	 */
-	public Collection<Comment> getUserComments(String user) throws Exception {
+	public Collection<? extends Comment> getUserComments(String user)
+		throws Exception {
 		String key="digg/comments/user/" + user;
 		@SuppressWarnings("unchecked") // parameterized cache
-		Collection<Comment> rv=(Collection<Comment>)mc.get(key);
+		Collection<? extends Comment> rv=(Collection<Comment>)mc.get(key);
 		if(rv == null) {
 			EventParameters ep=new EventParameters();
 			ep.setMinDate(System.currentTimeMillis() - MIN_COMMENT_AGE);
-			rv=digg.getUserComments(user, ep);
+			ep.setCount(PagingParameters.MAX_COUNT);
+			PagedItems<Comment> tmp = digg.getUserComments(user, ep);
+			// TODO:  Loop
+			if(tmp.getTotal() > tmp.getCount()) {
+				getLogger().warn("Only got %d of %d comments for %s",
+					tmp.getCount(), tmp.getTotal());
+			}
+			rv=tmp;
 			mc.set(key, USER_COMMENTS_TIME, rv);
 		}
 		return rv;

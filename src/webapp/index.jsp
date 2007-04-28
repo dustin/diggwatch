@@ -7,6 +7,10 @@
 		<link rel="stylesheet" href="/diggwatch/style.css"/>
 	</head>
 	<body>
+		<p class="descr">
+			This application is used to find, browse and track your digg comments
+			over the last 14 days.
+		</p>
 		<form method="get" action="cr">
 			<p>
 				Enter your digg username: <input type="text" name="user"/>

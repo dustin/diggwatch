@@ -3,7 +3,9 @@ package net.spy.diggwatch;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -50,12 +52,12 @@ public class CommentsDisplayServlet extends JWHttpServlet {
 			}
 		}
 		req.setAttribute("stories", stories);
-		Collection<StoryComment> sc=
-			new ArrayList<StoryComment>(comments.size());
+		List<StoryComment> sc=new ArrayList<StoryComment>(comments.size());
 		for(Comment c : comments) {
 			sc.add(new StoryComment(stories.get(c.getStoryId()), c));
 		}
 		req.setAttribute("storyComments", sc);
+		Collections.reverse(sc);
 		getLogger().info("storiesComments: %s", sc);
 		req.getRequestDispatcher("/comments.jsp").forward(req, res);
 	}

@@ -1,1 +1,38 @@
-// TODO
+body {
+  font-family: verdana;
+  color: #555;
+}
+
+p.descr {
+	margin-top: 2em;
+	margin-left: 5em;
+}
+
+p.hint {
+	font-size: small;
+	color: #ccc;
+}
+
+form {
+	margin-top: 2em;
+	margin-left: 5em;
+}
+
+h1 {
+	font-size: x-large;
+}
+
+h2 {
+  font-size: medium;
+  color: green;
+}
+
+p.comment {
+  margin: 2em;
+}
+
+p.commentfoot {
+  font-size: small;
+  padding-bottom: 1em;
+  border-bottom: solid 1px green;
+}
