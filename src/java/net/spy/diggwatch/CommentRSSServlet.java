@@ -2,7 +2,6 @@ package net.spy.diggwatch;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,22 +12,6 @@ import net.spy.jwebkit.xml.XMLOutputServlet;
  * Serve recent comments via RSS.
  */
 public class CommentRSSServlet extends XMLOutputServlet {
-
-	@Override
-	public void init(ServletConfig conf) throws ServletException {
-		super.init(conf);
-		try {
-			DiggInterface.initialize();
-		} catch (Exception e) {
-			throw new ServletException("Error initializing digg interface", e);
-		}
-	}
-
-	@Override
-	public void destroy() {
-		DiggInterface.shutdown();
-		super.destroy();
-	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res)

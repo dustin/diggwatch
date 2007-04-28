@@ -34,17 +34,26 @@ public class DiggInterface extends SpyObject {
 	private Digg digg=new Digg(APP_KEY);
 	private MemcachedClient mc=null;
 
+	/**
+	 * Get the singleton digg interface.
+	 */
 	public static DiggInterface getInstance() {
 		assert instance != null : "Not initialized";
 		return instance;
 	}
 
+	/**
+	 * Initialize the digg interface.
+	 */
 	public static void initialize() throws Exception {
 		instance=new DiggInterface();
 		instance.mc=new MemcachedClient(AddrUtil.getAddresses(
 				"red:11211 purple:11211"));
 	}
 
+	/**
+	 * Sht down the digg interface.
+	 */
 	public static void shutdown() {
 		instance.mc.shutdown();
 		instance=null;

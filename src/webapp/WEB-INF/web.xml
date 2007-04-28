@@ -7,6 +7,9 @@
 	'http://java.sun.com/dtd/web-app_2_3.dtd'>
 
 <web-app>
+	<listener>
+		<listener-class>net.spy.diggwatch.ContextListener</listener-class>
+	</listener>
 	<servlet>
 		<servlet-name>commentRss</servlet-name>
 		<servlet-class>net.spy.diggwatch.CommentRSSServlet</servlet-class>
