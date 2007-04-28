@@ -53,7 +53,7 @@ public class CommentFeed extends RSSChannel {
 		}
 
 		public String getDescription() {
-			return comment.getComment();
+			return comment.getComment().replace("\n", "<br/>\n");
 		}
 
 		public String getGuid() {
