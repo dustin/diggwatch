@@ -11,7 +11,7 @@
   <classpathentry kind="var" path="MAVEN_REPO/spy/jars/xmlkit-2.2.3.jar"/>
   <classpathentry kind="var" path="MAVEN_REPO/spy/jars/memcached-1.3.jar">
   </classpathentry>
-  <classpathentry kind="var" path="MAVEN_REPO/spy/jars/digg-1.1.2.jar">
+  <classpathentry kind="var" path="MAVEN_REPO/spy/jars/digg-SNAPSHOT.jar">
   </classpathentry>
   <classpathentry kind="var" path="MAVEN_REPO/servletapi/jars/servletapi-2.4.jar">
   </classpathentry>

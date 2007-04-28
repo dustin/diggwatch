@@ -13,6 +13,10 @@ p.hint {
 	color: #ccc;
 }
 
+p.error {
+	color: red;
+}
+
 form {
 	margin-top: 2em;
 	margin-left: 5em;
