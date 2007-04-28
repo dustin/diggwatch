@@ -75,7 +75,7 @@ public class CommentFeed extends RSSChannel {
 					+ comment.getDiggsUp() + "/-" + comment.getDiggsDown()
 					+ ")";
 			} else {
-				rv="possibly reply to comment on ``"
+				rv="possible reply to comment on ``"
 					+ story.getTitle() + "'' by " + comment.getUser() + "(+"
 					+ comment.getDiggsUp() + "/-" + comment.getDiggsDown()
 					+ ")";

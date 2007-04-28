@@ -26,6 +26,8 @@ public class DiggInterface extends SpyObject {
 	// How long incremental comments are cached
 	private static final int MIN_COMMENT_REPLY_TIME = 60;
 	private static final int MAX_COMMENT_REPLY_TIME = 3600*12;
+	// How far back to go for user comments. (one week should be enough)
+	private static final long MIN_COMMENT_AGE = 86000*7*1000;
 
 	private static DiggInterface instance=null;
 
@@ -56,6 +58,8 @@ public class DiggInterface extends SpyObject {
 		@SuppressWarnings("unchecked") // parameterized cache
 		Collection<Comment> rv=(Collection<Comment>)mc.get(key);
 		if(rv == null) {
+			EventParameters ep=new EventParameters();
+			ep.setMinDate(System.currentTimeMillis() - MIN_COMMENT_AGE);
 			rv=digg.getUserComments(user, null);
 			mc.set(key, USER_COMMENTS_TIME, rv);
 		}
