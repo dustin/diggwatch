@@ -60,7 +60,7 @@ public class DiggInterface extends SpyObject {
 		if(rv == null) {
 			EventParameters ep=new EventParameters();
 			ep.setMinDate(System.currentTimeMillis() - MIN_COMMENT_AGE);
-			rv=digg.getUserComments(user, null);
+			rv=digg.getUserComments(user, ep);
 			mc.set(key, USER_COMMENTS_TIME, rv);
 		}
 		return rv;
