@@ -7,4 +7,13 @@
 	'http://java.sun.com/dtd/web-app_2_3.dtd'>
 
 <web-app>
+	<servlet>
+		<servlet-name>commentRss</servlet-name>
+		<servlet-class>net.spy.diggwatch.CommentRSSServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>commentRss</servlet-name>
+		<url-pattern>/rss/comments/*</url-pattern>
+	</servlet-mapping>
 </web-app>
