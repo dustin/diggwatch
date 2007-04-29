@@ -3,6 +3,10 @@ package net.spy.diggwatch;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import net.spy.SpyObject;
@@ -13,6 +17,7 @@ import net.spy.digg.EventParameters;
 import net.spy.digg.PagedItems;
 import net.spy.digg.PagingParameters;
 import net.spy.digg.Story;
+import net.spy.digg.StoryParameters;
 import net.spy.memcached.AddrUtil;
 import net.spy.memcached.MemcachedClient;
 
@@ -94,7 +99,7 @@ public class DiggInterface extends SpyObject {
 	 * Get the story with the given ID.
 	 */
 	public Story getStory(int storyId) throws Exception {
-		String key="digg/story/" + storyId;
+		String key=makeStoryKey(storyId);
 		Object o=mc.get(key);
 		// The exceptions get memoized into the cache.
 		if(o instanceof DiggException) {
@@ -111,6 +116,84 @@ public class DiggInterface extends SpyObject {
 			}
 		}
 		return rv;
+	}
+
+	private String makeStoryKey(int storyId) {
+		return "digg/story/" + storyId;
+	}
+
+	/**
+	 * Get a collection of stories.  Try to get them from the cache where
+	 * possible.
+	 */
+	public Map<Integer, Story> getStories(Collection<Integer> sids)
+		throws Exception {
+		getLogger().info("Fetching %d stories", sids.size());
+		Map<Integer, Story> rv=new HashMap<Integer, Story>(sids.size());
+		Map<String, Integer> keysToFetch=new HashMap<String, Integer>();
+		for(int i : sids) {
+			keysToFetch.put(makeStoryKey(i), i);
+		}
+
+		// Store the remaining itemss
+		Collection<Integer> remainingStories=new HashSet<Integer>(sids);
+
+		// See how many stories we can get from the cache.
+		Map<String, Object> mcResponse = mc.getBulk(keysToFetch.keySet());
+		for(Map.Entry<String, Object> me : mcResponse.entrySet()) {
+			if(!(me.getValue() instanceof DiggException)) {
+				Story s=(Story)me.getValue();
+				rv.put(s.getId(), s);
+			}
+			remainingStories.remove(keysToFetch.get(me.getKey()));
+		}
+
+		// Get the rest from digg
+		if(!remainingStories.isEmpty()) {
+			getLogger().info("Fetching %d stories from digg",
+				remainingStories.size());
+			assert remainingStories.size() < 100
+				: "Trying to fetch too many stories.";
+			StoryParameters sp=new StoryParameters();
+			sp.setCount(PagingParameters.MAX_COUNT);
+			try {
+				PagedItems<Story> stories = digg.getStories(
+						remainingStories, sp);
+				assert stories.getTotal() == stories.getCount()
+					: "Total was " + stories.getTotal() + ", but I got "
+						+ stories.getCount();
+				for(Story s : stories) {
+					rv.put(s.getId(), s);
+					mc.set(makeStoryKey(s.getId()), STORY_TIME, s);
+				}
+			} catch(DiggException e) {
+				// Something went wrong, do them one at a time.
+				for(int sid : remainingStories) {
+					try {
+						Story story = getStory(sid);
+						rv.put(sid, story);
+					} catch(DiggException e2) {
+						if(e2.getErrorId() != 1008) {
+							throw e;
+						}
+						getLogger().info("Story %d was not found", sid);
+					}
+				}
+			}
+		}
+		return rv;
+	}
+
+	/**
+	 * Get all of the available stories for all of the given comemnts.
+	 */
+	public Map<Integer, Story> getStoriesForComments(
+			Collection<Comment> comments) throws Exception {
+		Set<Integer> sids=new HashSet<Integer>();
+		for(Comment c : comments) {
+			sids.add(c.getStoryId());
+		}
+		return getStories(sids);
 	}
 
 	/**

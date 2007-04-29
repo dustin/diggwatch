@@ -1,11 +1,13 @@
 package net.spy.diggwatch;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.spy.digg.Comment;
 import net.spy.jwebkit.xml.XMLOutputServlet;
 
 /**
@@ -33,8 +35,12 @@ public class CommentRSSServlet extends XMLOutputServlet {
 
 	private void processUser(String user, HttpServletResponse res)
 		throws Exception {
-		sendXml(new CommentFeed(user,
-				DiggInterface.getInstance().getRelevantComments(user)), res);
+		DiggInterface di=DiggInterface.getInstance();
+		Collection<Comment> comments = di.getRelevantComments(user);
+		// Make sure these have been fetched so they have a chance to arrive
+		// in bulk
+		di.getStoriesForComments(comments);
+		sendXml(new CommentFeed(user, comments), res);
 	}
 
 }
