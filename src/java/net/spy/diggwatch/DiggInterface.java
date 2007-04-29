@@ -36,7 +36,7 @@ public class DiggInterface extends SpyObject {
 	private static final int NEG_STORY_TIME = STORY_TIME/2;
 	// How long incremental comments are cached
 	private static final int MIN_COMMENT_REPLY_TIME = 180;
-	private static final int MAX_COMMENT_REPLY_TIME = 3600*12;
+	private static final int MAX_COMMENT_REPLY_TIME = 86400;
 
 	// How far back to go for user comments (ms). (two weeks should be enough)
 	private static final long MIN_COMMENT_AGE = STORY_TIME*1000;
@@ -230,7 +230,8 @@ public class DiggInterface extends SpyObject {
 
 		// Keep it in range.
 		int rv=(int)Math.max(MIN_COMMENT_REPLY_TIME,
-				Math.min(MAX_COMMENT_REPLY_TIME, howLongAgo * howLongAgo));
+				Math.min(MAX_COMMENT_REPLY_TIME,
+						howLongAgo * Math.log(howLongAgo)));
 		assert rv >= MIN_COMMENT_REPLY_TIME && rv <= MAX_COMMENT_REPLY_TIME
 			: rv + " is out of range";
 
