@@ -30,6 +30,8 @@ public class DiggInterface extends SpyObject {
 
 	// How long to cache user comments.
 	private static final int USER_COMMENTS_TIME = 900;
+	// How many comemnts to fetch for a user.
+	private static final int NUM_USER_COMMENTS = 20;
 	// How long stories are cached.
 	private static final int STORY_TIME = 86400*14;
 	// How long we negatively cache stories
@@ -82,7 +84,7 @@ public class DiggInterface extends SpyObject {
 		if(rv == null) {
 			EventParameters ep=new EventParameters();
 			ep.setMinDate(System.currentTimeMillis() - MIN_COMMENT_AGE);
-			ep.setCount(PagingParameters.MAX_COUNT);
+			ep.setCount(NUM_USER_COMMENTS);
 			PagedItems<Comment> tmp = digg.getUserComments(user, ep);
 			// TODO:  Loop
 			if(tmp.getTotal() > tmp.getCount()) {
