@@ -13,7 +13,11 @@
 			 title="RSS feed for <c:out value='${username}'/> @ digg"/>
 	</head>
 	<body>
-		<h1>Comments for <c:out value="${username}"/>
+		<h1>
+			<a href="http://digg.com/users/<c:out value='${username}'/>/profile">
+				<img alt="icon" src="/diggwatch/icon/<c:out value='${username}'/>"/>
+			</a>
+			Comments for <c:out value="${username}"/>
 			<a href="/diggwatch/rss/comments/<c:out value='${username}'/>"><img
 				src="http://media.west.spy.net/img/rss-icon.png"
 				alt="rss"/></a></h1>
@@ -32,7 +36,9 @@
 						<q><a href="<c:out value='${sc.story.diggLink}'/>"><c:out
 							value="${sc.story.title}"/></a></q>
 						by <a href="<c:out value='${sc.comment.user}'/>">
-							<c:out value='${sc.comment.user}'/></a>
+							<c:out value='${sc.comment.user}'/>
+							<img alt="icon" class="replyicon" width="24" height="24"
+								src="/diggwatch/icon/<c:out value='${sc.comment.user}'/>"/></a>
 					</c:otherwise>
 				</c:choose>
 				(+<c:out value="${sc.comment.diggsUp}"/>/-<c:out

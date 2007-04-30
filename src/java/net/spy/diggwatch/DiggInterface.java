@@ -18,6 +18,7 @@ import net.spy.digg.PagedItems;
 import net.spy.digg.PagingParameters;
 import net.spy.digg.Story;
 import net.spy.digg.StoryParameters;
+import net.spy.digg.User;
 import net.spy.memcached.AddrUtil;
 import net.spy.memcached.MemcachedClient;
 
@@ -39,6 +40,8 @@ public class DiggInterface extends SpyObject {
 	// How long incremental comments are cached
 	private static final int MIN_COMMENT_REPLY_TIME = 180;
 	private static final int MAX_COMMENT_REPLY_TIME = 86400;
+	// How long to cache users
+	private static final int USER_TIME = 3600;
 
 	// How far back to go for user comments (ms). (two weeks should be enough)
 	private static final long MIN_COMMENT_AGE = STORY_TIME*1000;
@@ -71,6 +74,19 @@ public class DiggInterface extends SpyObject {
 	public static void shutdown() {
 		instance.mc.shutdown();
 		instance=null;
+	}
+
+	/**
+	 * Get the user with the given username.
+	 */
+	public User getUser(String username) throws Exception {
+		String key="digg/user/" + username;
+		User rv=(User)mc.get(key);
+		if(rv == null) {
+			rv=digg.getUser(username);
+			mc.set(key, USER_TIME, rv);
+		}
+		return rv;
 	}
 
 	/**

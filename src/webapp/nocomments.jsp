@@ -13,7 +13,11 @@
 			 title="RSS feed for <c:out value='${username}'/> @ digg"/>
 	</head>
 	<body>
-		<h1>No recent comments for <c:out value="${username}"/> found
+		<h1>
+			<a href="http://digg.com/users/<c:out value='${username}'/>/profile">
+				<img alt="icon" src="/diggwatch/icon/<c:out value='${username}'/>"/>
+			</a>
+			No recent comments for <c:out value="${username}"/> found
 			<a href="/diggwatch/rss/comments/<c:out value='${username}'/>"><img
 				src="http://media.west.spy.net/img/rss-icon.png"
 				alt="rss"/></a></h1>

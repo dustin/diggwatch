@@ -25,6 +25,11 @@
 		<servlet-class>net.spy.diggwatch.CommentsRedirectServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>icon</servlet-name>
+		<servlet-class>net.spy.diggwatch.IconServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>commentRss</servlet-name>
@@ -37,5 +42,9 @@
 	<servlet-mapping>
 		<servlet-name>userRedir</servlet-name>
 		<url-pattern>/cr</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>icon</servlet-name>
+		<url-pattern>/icon/*</url-pattern>
 	</servlet-mapping>
 </web-app>

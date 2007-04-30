@@ -22,7 +22,7 @@ public class CommentsDisplayServlet extends JWHttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res)
-	throws ServletException, IOException {
+		throws ServletException, IOException {
 		String pi=req.getPathInfo();
 		if(pi == null || pi.length() == 0 || pi.equals("/")) {
 			// some sort of index thing?
