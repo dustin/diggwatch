@@ -63,7 +63,12 @@ public class CommentFeed extends RSSChannel {
 		}
 
 		public String getDescription() {
-			return comment.getComment().replace("\n", "<br/>\n");
+			String rv=comment.getComment().replace("\n", "<br/>\n");
+			if(!user.toLowerCase().equals(comment.getUser().toLowerCase())) {
+				rv = "<img src=\"http://bleu.west.spy.net/diggwatch/icon/"
+					+ comment.getUser() + "\"/><br/>" + rv;
+			}
+			return rv;
 		}
 
 		public String getGuid() {
