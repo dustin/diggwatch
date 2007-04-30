@@ -14,7 +14,7 @@
 	</head>
 	<body>
 		<h1>
-			<a href="http://digg.com/users/<c:out value='${username}'/>/profile">
+			<a href="http://digg.com/users/<c:out value='${username}'/>">
 				<img alt="icon" src="/diggwatch/icon/<c:out value='${username}'/>"/>
 			</a>
 			No recent comments for <c:out value="${username}"/> found
