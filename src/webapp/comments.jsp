@@ -26,7 +26,7 @@
 		<c:forEach var="sc" items="${storyComments}">
 			<h2 class="ch">
 				<c:choose>
-					<c:when test="${username == sc.comment.user}">
+					<c:when test="${sc.isCurrentUser}">
 						Your Comment on <q><a
 							href="<c:out value='${sc.story.diggLink}'/>"><c:out
 							value="${sc.story.title}"/></a></q>

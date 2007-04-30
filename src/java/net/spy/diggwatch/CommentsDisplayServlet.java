@@ -52,7 +52,8 @@ public class CommentsDisplayServlet extends JWHttpServlet {
 			for(Comment c : comments) {
 				// Skip broken stories.
 				if(stories.containsKey(c.getStoryId())) {
-					sc.add(new StoryComment(stories.get(c.getStoryId()), c));
+					sc.add(new StoryComment(stories.get(c.getStoryId()), c,
+						c.getUser().toLowerCase().equals(u.toLowerCase())));
 				}
 			}
 			req.setAttribute("storyComments", sc);
@@ -65,12 +66,14 @@ public class CommentsDisplayServlet extends JWHttpServlet {
 	public static class StoryComment {
 		private Story story=null;
 		private Comment comment=null;
-		public StoryComment(Story s, Comment c) {
+		private boolean isCurrentUser=false;
+		public StoryComment(Story s, Comment c, boolean currentUser) {
 			super();
 			assert s != null;
 			assert c != null;
 			story = s;
 			comment = c;
+			isCurrentUser=currentUser;
 			story.getDiggLink();
 		}
 		public Comment getComment() {
@@ -89,6 +92,9 @@ public class CommentsDisplayServlet extends JWHttpServlet {
 		}
 		public String getCommentLink() {
 			return story.getDiggLink() + "#c" + comment.getEventId();
+		}
+		public boolean getIsCurrentUser() {
+			return isCurrentUser;
 		}
 	}
 }
