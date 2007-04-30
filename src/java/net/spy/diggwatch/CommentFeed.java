@@ -80,13 +80,13 @@ public class CommentFeed extends RSSChannel {
 
 		public String getTitle() {
 			String rv=null;
-			if(user.equals(comment.getUser())) {
+			if(user.toLowerCase().equals(comment.getUser().toLowerCase())) {
 				rv="your comment on ``" + story.getTitle() + "'' (+"
 					+ comment.getDiggsUp() + "/-" + comment.getDiggsDown()
 					+ ")";
 			} else {
 				rv="possible reply to comment on ``"
-					+ story.getTitle() + "'' by " + comment.getUser() + "(+"
+					+ story.getTitle() + "'' by " + comment.getUser() + " (+"
 					+ comment.getDiggsUp() + "/-" + comment.getDiggsDown()
 					+ ")";
 			}
