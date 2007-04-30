@@ -13,7 +13,11 @@
 			 title="RSS feed for <c:out value='${username}'/> @ digg"/>
 	</head>
 	<body>
-		<h1>Comments for <c:out value="${username}"/></h1>
+		<h1>Comments for <c:out value="${username}"/>
+			<a href="/diggwatch/rss/comments/<c:out value='${username}'/>"><img
+				src="http://media.west.spy.net/img/rss-icon.png"
+				alt="rss"/></a></h1>
+		<%-- http://media.west.spy.net/img/rss-icon.png --%>
 		<p class="hint">(The most recent comments appear at the top.) </p>
 		<c:forEach var="sc" items="${storyComments}">
 			<h2 class="ch">

@@ -3,6 +3,10 @@ body {
   color: #555;
 }
 
+img {
+	border: none;
+}
+
 p.descr {
 	margin-top: 2em;
 	margin-left: 5em;
