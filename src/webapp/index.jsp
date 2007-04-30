@@ -11,8 +11,8 @@
 	</head>
 	<body>
 		<p class="descr">
-			This application is used to find, browse and track your digg comments
-			over the last 14 days.
+			This application is used to find, browse and track (via RSS) your digg
+			comments and their replies over the last 14 days.
 		</p>
 		<form method="get" action="cr">
 			<c:if test="${not empty param.derror}">
