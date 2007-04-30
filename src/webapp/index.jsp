@@ -15,8 +15,11 @@
 			over the last 14 days.
 		</p>
 		<form method="get" action="cr">
+			<c:if test="${not empty param.derror}">
+				<p class="error">Digg Error:  <c:out value="${param.derror}"/></p>
+			</c:if>
 			<c:if test="${not empty param.error}">
-				<p class="error">Error:  <c:out value="${param.error}"/></p>
+				<p class="error">Internal Error:  <c:out value="${param.error}"/></p>
 			</c:if>
 			<p>
 				Enter your digg username: <input type="text" name="user"/>

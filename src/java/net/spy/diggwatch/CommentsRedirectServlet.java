@@ -22,6 +22,9 @@ public class CommentsRedirectServlet extends JWHttpServlet {
 		if(user == null || user.trim().length() == 0) {
 			getLogger().info("No username");
 			res.sendRedirect("/diggwatch/");
+		} else if(!validUsername(user)) {
+			res.sendRedirect(
+				"/diggwatch/?derror=Please+enter+a+valid+username");
 		} else {
 			user=user.trim();
 			try {
@@ -30,15 +33,26 @@ public class CommentsRedirectServlet extends JWHttpServlet {
 				res.sendRedirect("/diggwatch/comments/" + user);
 			} catch (DiggException e) {
 				if(e.getErrorId() == 404) {
-					res.sendRedirect("/diggwatch/?error=No+such+user:+" + user);
+					res.sendRedirect("/diggwatch/?derror=No+such+user:+" + user);
 				} else {
-					res.sendRedirect("/diggwatch/?error="
+					res.sendRedirect("/diggwatch/?derror="
 							+ URLEncoder.encode(e.getMessage(), "UTF-8"));
 				}
 			} catch(Exception e) {
+				getLogger().warn("Unexpected error in diggwatch", e);
 				res.sendRedirect("/diggwatch/?error=unknown+error");
 			}
 		}
+	}
+
+	private boolean validUsername(String user) {
+		boolean rv=true;
+        for(char c : user.toCharArray()) {
+            if(Character.isWhitespace(c) || Character.isISOControl(c)) {
+                rv=false;
+            }
+        }
+        return rv;
 	}
 
 }
