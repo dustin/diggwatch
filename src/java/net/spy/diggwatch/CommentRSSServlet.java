@@ -42,9 +42,6 @@ public class CommentRSSServlet extends XMLOutputServlet {
 			di.getRelevantComments(user));
 		// newest first
 		Collections.reverse(comments);
-		// Make sure these have been fetched so they have a chance to arrive
-		// in bulk
-		di.getStoriesForComments(comments);
 		sendXml(new CommentFeed(user, comments), res);
 	}
 

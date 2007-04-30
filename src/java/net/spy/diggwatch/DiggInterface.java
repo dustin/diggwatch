@@ -34,17 +34,16 @@ public class DiggInterface extends SpyObject {
 	// How many comemnts to fetch for a user.
 	private static final int NUM_USER_COMMENTS = 20;
 	// How long stories are cached.
-	private static final int STORY_TIME = 86400*14;
+	private static final int STORY_TIME = 300;
 	// How long we negatively cache stories
-	private static final int NEG_STORY_TIME = STORY_TIME/2;
-	// How long incremental comments are cached
-	private static final int MIN_COMMENT_REPLY_TIME = 180;
-	private static final int MAX_COMMENT_REPLY_TIME = 86400;
+	private static final int NEG_STORY_TIME = 86400;
+	// How long incremental comments are cached (invalidated by story comments)
+	private static final int COMMENT_REPLY_TIME = 86400;
 	// How long to cache users
 	private static final int USER_TIME = 3600;
 
 	// How far back to go for user comments (ms). (two weeks should be enough)
-	private static final long MIN_COMMENT_AGE = STORY_TIME*1000;
+	private static final long MIN_COMMENT_AGE = 86400*14*1000;
 
 	private static DiggInterface instance=null;
 
@@ -218,15 +217,17 @@ public class DiggInterface extends SpyObject {
 	 * Get potential replies to the given comment.
 	 */
 	public Collection<Comment> getReplies(Comment c) throws Exception {
+		Story story=getStory(c.getStoryId());
 		int repId=c.getReplyId() == null ? c.getEventId() : c.getReplyId();
-		String key="digg/comments/replies/" + c.getStoryId() + "/" + repId;
+		String key="digg/comments/replies/" + c.getStoryId() + "."
+			+ story.getComments() + "/" + repId;
 		@SuppressWarnings("unchecked") // parameterized cast
 		Collection<Comment> rv=(Collection<Comment>) mc.get(key);
 		if(rv == null) {
 			EventParameters ep=new EventParameters();
 			ep.setCount(PagingParameters.MAX_COUNT);
 			rv=digg.getCommentReplies(c.getStoryId(), repId, ep);
-			mc.set(key, getCommentReplyTime(c), rv);
+			mc.set(key, COMMENT_REPLY_TIME, rv);
 		}
 		// Filter it since we cache all of them.
 		ArrayList<Comment> frv=new ArrayList<Comment>();
@@ -238,25 +239,6 @@ public class DiggInterface extends SpyObject {
 		return frv;
 	}
 
-	private int getCommentReplyTime(Comment c) {
-		long now=System.currentTimeMillis();
-		// How many seconds ago was this comment
-		long howLongAgo=(int)((now-c.getTimestamp())/1000);
-		if(howLongAgo < 1) {
-			howLongAgo=1;
-		}
-
-		// Keep it in range.
-		int rv=(int)Math.max(MIN_COMMENT_REPLY_TIME,
-				Math.min(MAX_COMMENT_REPLY_TIME,
-						howLongAgo * Math.log(howLongAgo)));
-		assert rv >= MIN_COMMENT_REPLY_TIME && rv <= MAX_COMMENT_REPLY_TIME
-			: rv + " is out of range";
-
-		getLogger().debug("Caching %s for %s (%d secs ago)", c, rv, howLongAgo);
-		return rv;
-	}
-
 	/**
 	 * Get the recent comments for the given user.
 	 */
@@ -265,6 +247,9 @@ public class DiggInterface extends SpyObject {
 		getLogger().info("Fetching comments for %s", user);
 		Collection<Comment> rv=new TreeSet<Comment>(new CommentComparator());
 		rv.addAll(getUserComments(user));
+		// Get the stories cached
+		getStoriesForComments(rv);
+		// Now fetch related comments.
 		rv.addAll(findRelatedComments(rv));
 		return rv;
 	}
