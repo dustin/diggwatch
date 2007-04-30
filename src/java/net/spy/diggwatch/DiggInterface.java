@@ -30,7 +30,7 @@ public class DiggInterface extends SpyObject {
 	private static final String APP_KEY="http://bleu.west.spy.net/diggwatch/";
 
 	// How long to cache user comments.
-	private static final int USER_COMMENTS_TIME = 900;
+	private static final int USER_COMMENTS_TIME = 60;
 	// How many comemnts to fetch for a user.
 	private static final int NUM_USER_COMMENTS = 20;
 	// How long stories are cached.
