@@ -1,7 +1,9 @@
 package net.spy.diggwatch;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +38,10 @@ public class CommentRSSServlet extends XMLOutputServlet {
 	private void processUser(String user, HttpServletResponse res)
 		throws Exception {
 		DiggInterface di=DiggInterface.getInstance();
-		Collection<Comment> comments = di.getRelevantComments(user);
+		List<Comment> comments = new ArrayList<Comment>(
+			di.getRelevantComments(user));
+		// newest first
+		Collections.reverse(comments);
 		// Make sure these have been fetched so they have a chance to arrive
 		// in bulk
 		di.getStoriesForComments(comments);
