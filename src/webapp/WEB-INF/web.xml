@@ -71,7 +71,7 @@
 
 	<servlet>
 		<servlet-name>domainCommentsRedir</servlet-name>
-		<servlet-class>net.spy.diggwatch.RedirectServlet</servlet-class>
+		<servlet-class>net.spy.diggwatch.DomainRedirectServlet</servlet-class>
 		<init-param>
 			<param-name>destination</param-name>
 			<param-value>/diggwatch/domainComments/</param-value>
@@ -93,7 +93,7 @@
 
 	<servlet>
 		<servlet-name>domainRedir</servlet-name>
-		<servlet-class>net.spy.diggwatch.RedirectServlet</servlet-class>
+		<servlet-class>net.spy.diggwatch.DomainRedirectServlet</servlet-class>
 		<init-param>
 			<param-name>destination</param-name>
 			<param-value>/diggwatch/domain/</param-value>
