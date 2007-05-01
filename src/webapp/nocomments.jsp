@@ -22,5 +22,6 @@
 				src="http://media.west.spy.net/img/rss-icon.png"
 				alt="rss"/></a></h1>
 		<p class="descr">Go post some comments and come back later.</p>
+		<jsp:include page="footer.jsp"/>
 	</body>
 </html>

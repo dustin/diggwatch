@@ -40,5 +40,6 @@
 				Enter a domain name: <input type="text" name="p"/>
 			</p>
 		</form>
+		<jsp:include page="footer.jsp"/>
 	</body>
 </html>

@@ -45,3 +45,14 @@ p.commentfoot {
   padding-bottom: 1em;
   border-bottom: solid 1px green;
 }
+
+#footer {
+	border-top: solid #ccc 1px;
+	color: #ccc;
+	font-size: xx-small;
+	text-align: right;
+}
+
+#footer a, #footer a:visited {
+	color: #ccc;
+}

@@ -52,5 +52,6 @@
 				| <a href="<c:out value='${sc.parentLink}'/>">go to parent</a>
 			</p>
 		</c:forEach>
+		<jsp:include page="footer.jsp"/>
 	</body>
 </html>

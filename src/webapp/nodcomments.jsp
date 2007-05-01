@@ -20,5 +20,6 @@
 			<a href="/diggwatch/rss/domainComments/<c:out value='${domain}'/>"><img
 				src="http://media.west.spy.net/img/rss-icon.png"
 				alt="rss"/></a></h1>
+		<jsp:include page="footer.jsp"/>
 	</body>
 </html>
