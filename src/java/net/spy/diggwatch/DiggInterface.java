@@ -307,19 +307,21 @@ public class DiggInterface extends SpyObject {
 		}
 		String key="/digg/comments/domain/" + domain;
 		@SuppressWarnings("unchecked") // generic cast
-		Collection<Comment> rv=(Collection<Comment>) mc.get(key);
-		if(rv == null) {
+		Collection<Comment> comments=(Collection<Comment>) mc.get(key);
+		if(comments == null) {
 			EventParameters ep=new EventParameters();
 			ep.setCount(PagingParameters.MAX_COUNT);
-			rv = digg.getComments(sids, ep);
-			mc.set(key, DOMAIN_TIME, rv);
+			comments = digg.getComments(sids, ep);
+			mc.set(key, DOMAIN_TIME, comments);
 		}
+		Collection<Comment> rv=new TreeSet<Comment>(new CommentComparator());
+		rv.addAll(comments);
 		return rv;
 	}
 
 	static class CommentComparator implements Comparator<Comment> {
 		public int compare(Comment o1, Comment o2) {
-			return o1.getEventId() - o2.getEventId();
+			return o2.getEventId() - o1.getEventId();
 		}
 	}
 }

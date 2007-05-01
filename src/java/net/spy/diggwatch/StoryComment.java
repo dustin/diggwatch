@@ -12,14 +12,12 @@ import net.spy.digg.Story;
 public class StoryComment {
 	private Story story=null;
 	private Comment comment=null;
-	private boolean isCurrentUser=false;
-	public StoryComment(Story s, Comment c, boolean currentUser) {
+	public StoryComment(Story s, Comment c) {
 		super();
 		assert s != null;
 		assert c != null;
 		story = s;
 		comment = c;
-		isCurrentUser=currentUser;
 		story.getDiggLink();
 	}
 	public Comment getComment() {
@@ -38,8 +36,5 @@ public class StoryComment {
 	}
 	public String getCommentLink() {
 		return story.getDiggLink() + "#c" + comment.getEventId();
-	}
-	public boolean getIsCurrentUser() {
-		return isCurrentUser;
 	}
 }

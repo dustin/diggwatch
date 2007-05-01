@@ -12,18 +12,34 @@
 	</listener>
 	<servlet>
 		<servlet-name>commentRss</servlet-name>
-		<servlet-class>net.spy.diggwatch.CommentRSSServlet</servlet-class>
+		<servlet-class>net.spy.diggwatch.UserCommentRSSServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>commentDisplay</servlet-name>
-		<servlet-class>net.spy.diggwatch.CommentsDisplayServlet</servlet-class>
+		<servlet-class>net.spy.diggwatch.UserCommentsDisplayServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>userRedir</servlet-name>
-		<servlet-class>net.spy.diggwatch.CommentsRedirectServlet</servlet-class>
+		<servlet-class>net.spy.diggwatch.RedirectServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
+		<init-param>
+			<param-name>destination</param-name>
+			<param-value>/diggwatch/comments/</param-value>
+		</init-param>
+		<init-param>
+			<param-name>validName</param-name>
+			<param-value>username</param-value>
+		</init-param>
+		<init-param>
+			<param-name>noSuch</param-name>
+			<param-value>No such user</param-value>
+		</init-param>
+		<init-param>
+			<param-name>dError</param-name>
+			<param-value>/diggwatch/?userError=</param-value>
+		</init-param>
 	</servlet>
 	<servlet>
 		<servlet-name>icon</servlet-name>
@@ -41,7 +57,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>userRedir</servlet-name>
-		<url-pattern>/cr</url-pattern>
+		<url-pattern>/ur</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>icon</servlet-name>
