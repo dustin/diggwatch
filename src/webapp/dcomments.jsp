@@ -26,7 +26,7 @@
 				Comment by
 				<q><a href="<c:out value='${sc.story.diggLink}'/>"><c:out
 					value="${sc.story.title}"/></a></q>
-				by <a href="<c:out value='${sc.comment.user}'/>">
+				by <a href="<c:out value='../comments/${sc.comment.user}'/>">
 					<c:out value='${sc.comment.user}'/>
 					<img alt="icon" class="replyicon" width="24" height="24"
 						src="/diggwatch/icon/<c:out value='${sc.comment.user}'/>"/></a>
