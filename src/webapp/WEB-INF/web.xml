@@ -23,7 +23,6 @@
 	<servlet>
 		<servlet-name>userRedir</servlet-name>
 		<servlet-class>net.spy.diggwatch.RedirectServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
 		<init-param>
 			<param-name>destination</param-name>
 			<param-value>/diggwatch/comments/</param-value>
@@ -40,6 +39,7 @@
 			<param-name>dError</param-name>
 			<param-value>/diggwatch/?userError=</param-value>
 		</init-param>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
 		<servlet-name>icon</servlet-name>
