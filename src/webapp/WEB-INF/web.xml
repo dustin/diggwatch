@@ -10,19 +10,28 @@
 	<listener>
 		<listener-class>net.spy.diggwatch.ContextListener</listener-class>
 	</listener>
+
 	<servlet>
 		<servlet-name>commentRss</servlet-name>
 		<servlet-class>net.spy.diggwatch.UserCommentRSSServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+
 	<servlet>
-		<servlet-name>commentDisplay</servlet-name>
+		<servlet-name>userCommentDisplay</servlet-name>
 		<servlet-class>net.spy.diggwatch.UserCommentsDisplayServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+
+	<servlet>
+		<servlet-name>domainCommentDisplay</servlet-name>
+		<servlet-class>net.spy.diggwatch.DomainCommentsDisplayServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
 	<servlet>
 		<servlet-name>userRedir</servlet-name>
-		<servlet-class>net.spy.diggwatch.RedirectServlet</servlet-class>
+		<servlet-class>net.spy.diggwatch.UserRedirectServlet</servlet-class>
 		<init-param>
 			<param-name>destination</param-name>
 			<param-value>/diggwatch/comments/</param-value>
@@ -41,6 +50,29 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+
+	<servlet>
+		<servlet-name>domainRedir</servlet-name>
+		<servlet-class>net.spy.diggwatch.RedirectServlet</servlet-class>
+		<init-param>
+			<param-name>destination</param-name>
+			<param-value>/diggwatch/domainComments/</param-value>
+		</init-param>
+		<init-param>
+			<param-name>validName</param-name>
+			<param-value>domain name</param-value>
+		</init-param>
+		<init-param>
+			<param-name>noSuch</param-name>
+			<param-value>Nothing found for the domain</param-value>
+		</init-param>
+		<init-param>
+			<param-name>dError</param-name>
+			<param-value>/diggwatch/?domainError=</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
 	<servlet>
 		<servlet-name>icon</servlet-name>
 		<servlet-class>net.spy.diggwatch.IconServlet</servlet-class>
@@ -52,12 +84,20 @@
 		<url-pattern>/rss/comments/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>commentDisplay</servlet-name>
+		<servlet-name>userCommentDisplay</servlet-name>
 		<url-pattern>/comments/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>domainCommentDisplay</servlet-name>
+		<url-pattern>/domainComments/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>userRedir</servlet-name>
 		<url-pattern>/ur</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>domainRedir</servlet-name>
+		<url-pattern>/dr</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>icon</servlet-name>

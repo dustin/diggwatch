@@ -311,7 +311,11 @@ public class DiggInterface extends SpyObject {
 		if(comments == null) {
 			EventParameters ep=new EventParameters();
 			ep.setCount(PagingParameters.MAX_COUNT);
-			comments = digg.getComments(sids, ep);
+			if(sids.isEmpty()) {
+				comments=new ArrayList<Comment>();
+			} else {
+				comments = digg.getComments(sids, ep);
+			}
 			mc.set(key, DOMAIN_TIME, comments);
 		}
 		Collection<Comment> rv=new TreeSet<Comment>(new CommentComparator());

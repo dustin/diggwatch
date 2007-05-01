@@ -27,5 +27,18 @@
 				Enter your digg username: <input type="text" name="p"/>
 			</p>
 		</form>
+		<hr/>
+		<p class="descr">
+			You can also track comments for any story that linked to a specific
+			domain.  (probably not working, but I'm playing with it now)
+		</p>
+		<form method="get" action="dr">
+			<c:if test="${not empty param.domainError}">
+				<p class="error">Digg Error:  <c:out value="${param.domainError}"/></p>
+			</c:if>
+			<p>
+				Enter a domain name: <input type="text" name="p"/>
+			</p>
+		</form>
 	</body>
 </html>

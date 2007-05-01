@@ -49,17 +49,21 @@ public class RedirectServlet extends JWHttpServlet {
 		return URLEncoder.encode(s, "UTF-8");
 	}
 
+	protected void validatePath(String path) throws Exception {
+		// nothing
+	}
+
 	@Override
 	protected void doGet(
 		HttpServletRequest req, HttpServletResponse res)
 		throws ServletException, IOException {
-		String path=req.getParameter("p");
+		String path=req.getParameter("p").trim();
 		if(!validUsername(path)) {
 			res.sendRedirect(dError + "Please+enter+a+valid+"
 					+ encodeString(validName));
 		} else {
 			try {
-				DiggInterface.getInstance().getUserComments(path.trim());
+				validatePath(path);
 				getLogger().info("Redirecting for %s", path);
 				res.sendRedirect(destination + path);
 			} catch (DiggException e) {
