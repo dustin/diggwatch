@@ -27,6 +27,7 @@
 					value="${s.title}"/></q></a>
 				by
 				<a href="http://digg.com/users/<c:out value='${s.user.name}'/>">
+					<c:out value="${s.user.name}"/>
 					<img width="24" height="24" src="<c:out value='${s.user.icon}'/>"/>
 				</a>
 			</h2>
