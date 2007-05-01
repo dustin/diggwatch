@@ -172,7 +172,7 @@ public class DiggInterface extends SpyObject {
 		if(!remainingStories.isEmpty()) {
 			getLogger().info("Fetching %d stories from digg",
 				remainingStories.size());
-			assert remainingStories.size() < 100
+			assert remainingStories.size() <= 100
 				: "Trying to fetch too many stories.";
 			StoryParameters sp=new StoryParameters();
 			sp.setCount(PagingParameters.MAX_COUNT);
