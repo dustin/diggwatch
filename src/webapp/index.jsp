@@ -29,12 +29,24 @@
 		</form>
 		<hr/>
 		<p class="descr">
-			You can also track comments for any story that linked to a specific
-			domain.
+			...or track any article linking to a particular domain.
 		</p>
 		<form method="get" action="dr">
 			<c:if test="${not empty param.domainError}">
 				<p class="error">Digg Error:  <c:out value="${param.domainError}"/></p>
+			</c:if>
+			<p>
+				Enter a domain name: <input type="text" name="p"/>
+			</p>
+		</form>
+		<hr/>
+		<p class="descr">
+			...or track <em>comments</em> on any article linking to a particular
+			domain.
+		</p>
+		<form method="get" action="dcr">
+			<c:if test="${not empty param.domainCommentsError}">
+				<p class="error">Digg Error:  <c:out value="${param.domainCommentsError}"/></p>
 			</c:if>
 			<p>
 				Enter a domain name: <input type="text" name="p"/>

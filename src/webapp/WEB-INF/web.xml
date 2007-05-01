@@ -24,6 +24,12 @@
 	</servlet>
 
 	<servlet>
+		<servlet-name>domainRss</servlet-name>
+		<servlet-class>net.spy.diggwatch.DomainRSSServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
 		<servlet-name>userCommentDisplay</servlet-name>
 		<servlet-class>net.spy.diggwatch.UserCommentsDisplayServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
@@ -32,6 +38,12 @@
 	<servlet>
 		<servlet-name>domainCommentDisplay</servlet-name>
 		<servlet-class>net.spy.diggwatch.DomainCommentsDisplayServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>domainDisplay</servlet-name>
+		<servlet-class>net.spy.diggwatch.DomainDisplayServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
@@ -58,11 +70,33 @@
 	</servlet>
 
 	<servlet>
-		<servlet-name>domainRedir</servlet-name>
+		<servlet-name>domainCommentsRedir</servlet-name>
 		<servlet-class>net.spy.diggwatch.RedirectServlet</servlet-class>
 		<init-param>
 			<param-name>destination</param-name>
 			<param-value>/diggwatch/domainComments/</param-value>
+		</init-param>
+		<init-param>
+			<param-name>validName</param-name>
+			<param-value>domain name</param-value>
+		</init-param>
+		<init-param>
+			<param-name>noSuch</param-name>
+			<param-value>Nothing found for the domain</param-value>
+		</init-param>
+		<init-param>
+			<param-name>dError</param-name>
+			<param-value>/diggwatch/?domainCommentsError=</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>domainRedir</servlet-name>
+		<servlet-class>net.spy.diggwatch.RedirectServlet</servlet-class>
+		<init-param>
+			<param-name>destination</param-name>
+			<param-value>/diggwatch/domain/</param-value>
 		</init-param>
 		<init-param>
 			<param-name>validName</param-name>
@@ -90,6 +124,10 @@
 		<url-pattern>/rss/comments/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
+		<servlet-name>domainRss</servlet-name>
+		<url-pattern>/rss/domain/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>domainCommentRss</servlet-name>
 		<url-pattern>/rss/domainComments/*</url-pattern>
 	</servlet-mapping>
@@ -102,8 +140,16 @@
 		<url-pattern>/domainComments/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
+		<servlet-name>domainDisplay</servlet-name>
+		<url-pattern>/domain/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>userRedir</servlet-name>
 		<url-pattern>/ur</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>domainCommentsRedir</servlet-name>
+		<url-pattern>/dcr</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>domainRedir</servlet-name>

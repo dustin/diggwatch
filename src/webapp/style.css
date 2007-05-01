@@ -46,6 +46,10 @@ p.commentfoot {
   border-bottom: solid 1px green;
 }
 
+p.storySub {
+	font-size: x-small;
+}
+
 #footer {
 	border-top: solid #ccc 1px;
 	color: #ccc;
