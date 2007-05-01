@@ -19,7 +19,8 @@ public class UserCommentRSSServlet extends BaseDiggServlet {
 		DiggInterface di=DiggInterface.getInstance();
 		List<Comment> comments = new ArrayList<Comment>(
 			di.getRelevantComments(path));
-		sendXml(new CommentFeed(path, comments), res);
+		sendXml(new CommentFeed(path, path
+			+ "'s comments (and replies) on digg", comments), res);
 	}
 
 }

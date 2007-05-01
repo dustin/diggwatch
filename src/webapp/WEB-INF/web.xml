@@ -12,8 +12,14 @@
 	</listener>
 
 	<servlet>
-		<servlet-name>commentRss</servlet-name>
+		<servlet-name>userCommentRss</servlet-name>
 		<servlet-class>net.spy.diggwatch.UserCommentRSSServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>domainCommentRss</servlet-name>
+		<servlet-class>net.spy.diggwatch.DomainCommentRSSServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
@@ -80,8 +86,12 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>commentRss</servlet-name>
+		<servlet-name>userCommentRss</servlet-name>
 		<url-pattern>/rss/comments/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>domainCommentRss</servlet-name>
+		<url-pattern>/rss/domainComments/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>userCommentDisplay</servlet-name>

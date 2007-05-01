@@ -6,16 +6,18 @@
 
 <html>
 	<head>
-		<title>Diggwatcher - comments for <c:out value="${domain}"/></title>
+		<title>
+			Diggwatcher - comments on articles from <c:out value="${domain}"/>
+		</title>
 		<link rel="stylesheet" href="/diggwatch/style.css"/>
 		<link rel="alternate" type="application/rss+xml"
-		   href="/diggwatch/rss/domaincomments/<c:out value='${domain}'/>"
+		   href="/diggwatch/rss/domainComments/<c:out value='${domain}'/>"
 			 title="RSS feed for <c:out value='${domain}'/> @ digg"/>
 	</head>
 	<body>
 		<h1>
-			Comments for <c:out value="${domain}"/>
-			<a href="/diggwatch/rss/domaincomments/<c:out value='${domain}'/>"><img
+			Comments on articles from  <c:out value="${domain}"/>
+			<a href="/diggwatch/rss/domainComments/<c:out value='${domain}'/>"><img
 				src="http://media.west.spy.net/img/rss-icon.png"
 				alt="rss"/></a></h1>
 		<p class="hint">(The most recent comments appear at the top.) </p>

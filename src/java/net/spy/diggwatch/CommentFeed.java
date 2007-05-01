@@ -12,28 +12,28 @@ import net.spy.jwebkit.rss.RSSItem;
 
 public class CommentFeed extends RSSChannel {
 
-	private static final String BASE_URL
+	public static final String BASE_URL
 		= "http://bleu.west.spy.net/diggwatch/";
-	private String user=null;
+	// Path means either user or domain
+	protected String path=null;
 	private Collection<Comment> comments=null;
 
-	public CommentFeed(String u, Collection<Comment> c) {
-		super(u + " @ digg", BASE_URL + "comments/" + u,
-			u + "'s comments (and replies) on digg");
-		user=u;
+	public CommentFeed(String p, String title, Collection<Comment> c) {
+		super(p + " @ digg", BASE_URL + "comments/" + p, title);
+		path=p;
 		comments = c;
 	}
 
 	@Override
 	protected Collection<? extends RSSItem> getItems() {
-		Collection<CommentAdaptor> rv=new ArrayList<CommentAdaptor>(
+		Collection<RSSItem> rv=new ArrayList<RSSItem>(
 			comments.size());
 		DiggInterface di=DiggInterface.getInstance();
 		for(Comment c : comments) {
 			try {
 				try {
 					Story s=di.getStory(c.getStoryId());
-					rv.add(new CommentAdaptor(user, s, c));
+					rv.add(adaptComment(s, c));
 				} catch(DiggException e) {
 					getLogger().warn("Error fetching story %d (skipping it)",
 						c.getStoryId(), e);
@@ -49,22 +49,26 @@ public class CommentFeed extends RSSChannel {
 		return rv;
 	}
 
-	static class CommentAdaptor implements RSSItem {
+	protected RSSItem adaptComment(Story s, Comment c) {
+		return new CommentAdaptor(path, s, c);
+	}
 
-		private Story story=null;
-		private Comment comment=null;
-		private String user=null;
+	public static class CommentAdaptor implements RSSItem {
+
+		protected Story story=null;
+		protected Comment comment=null;
+		protected String path=null;
 
 		public CommentAdaptor(String u, Story s, Comment c) {
 			super();
 			story=s;
 			comment=c;
-			user=u;
+			path=u;
 		}
 
 		public String getDescription() {
 			String rv=comment.getComment().replace("\n", "<br/>\n");
-			if(!user.toLowerCase().equals(comment.getUser().toLowerCase())) {
+			if(!path.toLowerCase().equals(comment.getUser().toLowerCase())) {
 				rv = "<img src=\"http://bleu.west.spy.net/diggwatch/icon/"
 					+ comment.getUser() + "\"/><br/>" + rv;
 			}
@@ -85,7 +89,7 @@ public class CommentFeed extends RSSChannel {
 
 		public String getTitle() {
 			String rv=null;
-			if(user.toLowerCase().equals(comment.getUser().toLowerCase())) {
+			if(path.toLowerCase().equals(comment.getUser().toLowerCase())) {
 				rv="your comment on ``" + story.getTitle() + "'' (+"
 					+ comment.getDiggsUp() + "/-" + comment.getDiggsDown()
 					+ ")";
