@@ -42,6 +42,9 @@ public class DiggInterface extends SpyObject {
 	// How long to cache users
 	private static final int USER_TIME = 3600;
 
+	// How long to cache digg stories by domain.
+	private static final int DOMAIN_TIME = 900;
+
 	// How far back to go for user comments (ms). (two weeks should be enough)
 	private static final long MIN_COMMENT_AGE = 86400*14*1000;
 
@@ -264,6 +267,53 @@ public class DiggInterface extends SpyObject {
 			rv.addAll(di.getReplies(c));
 		}
 
+		return rv;
+	}
+
+	/**
+	 * Get the stories for the given domain.
+	 */
+	public Collection<Story> getStoriesForDomain(String domain)
+		throws Exception {
+		Collection<Story> rv=null;
+		String key="/digg/stories/domain/" + domain;
+		@SuppressWarnings("unchecked") // generic cast
+		Collection<Integer> sids=(Collection<Integer>)mc.get(key);
+		if(sids == null) {
+			sids=new HashSet<Integer>();
+			StoryParameters sp=new StoryParameters();
+			sp.setDomain(domain);
+			sp.setCount(PagingParameters.MAX_COUNT);
+			rv = digg.getStories(sp);
+			for(Story s : rv) {
+				mc.set(makeStoryKey(s.getId()), STORY_TIME, s);
+				sids.add(s.getId());
+			}
+			mc.set(key, DOMAIN_TIME, sids);
+		} else {
+			rv=getStories(sids).values();
+		}
+		return rv;
+	}
+
+	/**
+	 * Get comments for the given domain.
+	 */
+	public Collection<Comment> getCommentsForDomain(String domain)
+		throws Exception {
+		Collection<Integer> sids=new HashSet<Integer>();
+		for(Story s : getStoriesForDomain(domain)) {
+			sids.add(s.getId());
+		}
+		String key="/digg/comments/domain/" + domain;
+		@SuppressWarnings("unchecked") // generic cast
+		Collection<Comment> rv=(Collection<Comment>) mc.get(key);
+		if(rv == null) {
+			EventParameters ep=new EventParameters();
+			ep.setCount(PagingParameters.MAX_COUNT);
+			rv = digg.getComments(sids, ep);
+			mc.set(key, DOMAIN_TIME, rv);
+		}
 		return rv;
 	}
 
