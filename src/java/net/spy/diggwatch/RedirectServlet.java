@@ -9,11 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.spy.digg.DiggException;
+import net.spy.jwebkit.JWHttpServlet;
 
 /**
  * Redirect based on the path.
  */
-public class RedirectServlet extends BaseDiggServlet {
+public class RedirectServlet extends JWHttpServlet {
 
 	private String destination = "/diggwatch/comments/";
 	private String validName="username";
@@ -24,8 +25,8 @@ public class RedirectServlet extends BaseDiggServlet {
 	public void init(ServletConfig conf) throws ServletException {
 		super.init(conf);
 		destination=conf.getInitParameter("destination");
-		validName=conf.getInitParameter("username");
-		noSuch=conf.getInitParameter("No such user");
+		validName=conf.getInitParameter("validName");
+		noSuch=conf.getInitParameter("noSuch");
 		dError=conf.getInitParameter("dError");
 		assert destination != null;
 		assert validName != null;
@@ -49,11 +50,12 @@ public class RedirectServlet extends BaseDiggServlet {
 	}
 
 	@Override
-	protected void processPath(String path,
-		HttpServletRequest req, HttpServletResponse res) throws Exception {
+	protected void doGet(
+		HttpServletRequest req, HttpServletResponse res)
+		throws ServletException, IOException {
+		String path=req.getParameter("p");
 		if(!validUsername(path)) {
-			res.sendRedirect(
-				"/diggwatch/?derror=Please+enter+a+valid"
+			res.sendRedirect(dError + "Please+enter+a+valid+"
 					+ encodeString(validName));
 		} else {
 			try {

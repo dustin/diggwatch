@@ -24,7 +24,7 @@
 				<p class="error">Digg Error:  <c:out value="${param.userError}"/></p>
 			</c:if>
 			<p>
-				Enter your digg username: <input type="text" name="user"/>
+				Enter your digg username: <input type="text" name="p"/>
 			</p>
 		</form>
 	</body>
