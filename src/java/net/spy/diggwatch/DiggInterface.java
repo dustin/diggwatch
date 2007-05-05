@@ -334,7 +334,7 @@ public class DiggInterface extends SpyObject {
 	public Collection<Story> getStoriesForDomain(String domain)
 		throws Exception {
 		Collection<Story> rv=null;
-		String key="/digg/stories/domain/" + domain;
+		String key="digg/stories/domain/" + domain;
 		@SuppressWarnings("unchecked") // generic cast
 		Collection<Integer> sids=(Collection<Integer>)mc.get(key);
 		if(sids == null) {
@@ -363,7 +363,7 @@ public class DiggInterface extends SpyObject {
 		for(Story s : getStoriesForDomain(domain)) {
 			sids.add(s.getId());
 		}
-		String key="/digg/comments/domain/" + domain;
+		String key="digg/comments/domain/" + domain;
 		@SuppressWarnings("unchecked") // generic cast
 		Collection<Comment> comments=(Collection<Comment>) mc.get(key);
 		if(comments == null) {
@@ -383,7 +383,7 @@ public class DiggInterface extends SpyObject {
 
 	public Collection<Comment> getCommentsFromFriends(String user)
 		throws Exception {
-		String friendKey="/digg/comments/friends/" + user;
+		String friendKey="digg/comments/friends/" + user;
 		@SuppressWarnings("unchecked") // generic cast
 		List<String> friends=(List<String>)mc.get(friendKey);
 		if(friends == null) {
