@@ -45,7 +45,7 @@ public class DiggInterface extends SpyObject {
 	// How long friends of a user are cached
 	private static final int USER_FRIEND_TIME = 86400;
 	// How long to cache users
-	private static final int USER_TIME = 3600;
+	private static final int USER_TIME = 86400;
 
 	// How long to cache digg stories by domain.
 	private static final int DOMAIN_TIME = 900;
@@ -94,6 +94,64 @@ public class DiggInterface extends SpyObject {
 			mc.set(key, USER_TIME, rv);
 		}
 		return rv;
+	}
+
+	/**
+	 * Get a user from the cache.
+	 */
+	public User getUserFromCache(String username) {
+		String key="digg/user/" + username;
+		return (User)mc.get(key);
+	}
+
+	/**
+	 * Get the users for a collection of strings.
+	 */
+	public Map<String, User> getUsers(Collection<String> usernames)
+		throws Exception {
+		Map<String, User> rv = new HashMap<String, User>(
+			getCachedUsers(usernames));
+
+		Collection<String> remainingUsers=new HashSet<String>(usernames);
+		remainingUsers.removeAll(rv.keySet());
+		for(String u : remainingUsers) {
+			User user = getUser(u);
+			rv.put(user.getName(), user);
+		}
+
+		return rv;
+	}
+
+	/**
+	 * Get all of the users currently in the cache.
+	 */
+	public Map<String, User> getCachedUsers(Collection<String> usernames) {
+		String keyBase="digg/user/";
+		Map<String, User> rv=new HashMap<String, User>();
+		Collection<String> keys=new HashSet<String>();
+		for(String s : usernames) {
+			keys.add(keyBase + s);
+		}
+		Map<String, Object> fromCache=mc.getBulk(keys);
+		for(Map.Entry<String, Object> me : fromCache.entrySet()) {
+			assert me.getKey().startsWith(keyBase);
+			String u=me.getKey().substring(keyBase.length());
+			assert !u.startsWith("/");
+			rv.put(u, (User)me.getValue());
+		}
+		return rv;
+	}
+
+	/**
+	 * Get the cached users for the given comments.
+	 */
+	public Map<String, User> getCachedUsersForComments(
+		Collection<Comment> comments) {
+		Collection<String> users=new HashSet<String>();
+		for(Comment c : comments) {
+			users.add(c.getUser());
+		}
+		return getCachedUsers(users);
 	}
 
 	/**

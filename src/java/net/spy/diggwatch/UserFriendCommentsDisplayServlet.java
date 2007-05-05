@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.spy.digg.Comment;
 import net.spy.digg.Story;
+import net.spy.digg.User;
 
 public class UserFriendCommentsDisplayServlet extends BaseDiggServlet {
 
@@ -23,12 +24,19 @@ public class UserFriendCommentsDisplayServlet extends BaseDiggServlet {
 			req.getRequestDispatcher("/nofcomments.jsp").forward(req, res);
 		} else {
 			DiggInterface di=DiggInterface.getInstance();
+			Map<String, User> users = di.getCachedUsersForComments(comments);
 			Map<Integer, Story> stories = di.getStoriesForComments(comments);
 			List<StoryComment> sc=new ArrayList<StoryComment>(comments.size());
 			for(Comment c : comments) {
 				// Skip broken stories.
 				if(stories.containsKey(c.getStoryId())) {
-					sc.add(new StoryComment(stories.get(c.getStoryId()), c));
+					String icon = "/diggwatch/icon/" + c.getUser();
+					User user = users.get(c.getUser());
+					if(user != null) {
+						icon = user.getIcon();
+					}
+					sc.add(new StoryComment(stories.get(c.getStoryId()),
+						c, icon));
 				}
 			}
 			req.setAttribute("storyComments", sc);

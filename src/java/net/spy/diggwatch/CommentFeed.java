@@ -7,6 +7,7 @@ import java.util.Date;
 import net.spy.digg.Comment;
 import net.spy.digg.DiggException;
 import net.spy.digg.Story;
+import net.spy.digg.User;
 import net.spy.jwebkit.rss.RSSChannel;
 import net.spy.jwebkit.rss.RSSItem;
 
@@ -69,8 +70,14 @@ public class CommentFeed extends RSSChannel {
 		public String getDescription() {
 			String rv=comment.getComment().replace("\n", "<br/>\n");
 			if(!path.toLowerCase().equals(comment.getUser().toLowerCase())) {
-				rv = "<img src=\"http://bleu.west.spy.net/diggwatch/icon/"
-					+ comment.getUser() + "\"/><br/>" + rv;
+				String icon="http://bleu.west.spy.net/diggwatch/icon/"
+					+ comment.getUser();
+				User user = DiggInterface.getInstance().getUserFromCache(
+					comment.getUser());
+				if(user != null) {
+					icon=user.getIcon();
+				}
+				rv = "<img src=\"" + icon +  "\"/><br/>" + rv;
 			}
 			return rv;
 		}

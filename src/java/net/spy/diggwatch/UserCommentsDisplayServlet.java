@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.spy.digg.Comment;
 import net.spy.digg.Story;
+import net.spy.digg.User;
 
 /**
  * Display comments for the given user.
@@ -26,12 +27,19 @@ public class UserCommentsDisplayServlet extends BaseDiggServlet {
 			req.getRequestDispatcher("/nocomments.jsp").forward(req, res);
 		} else {
 			DiggInterface di=DiggInterface.getInstance();
+			Map<String, User> users = di.getCachedUsersForComments(comments);
 			Map<Integer, Story> stories = di.getStoriesForComments(comments);
 			List<StoryComment> sc=new ArrayList<StoryComment>(comments.size());
 			for(Comment c : comments) {
 				// Skip broken stories.
 				if(stories.containsKey(c.getStoryId())) {
+					String icon="/diggwatch/icon/" + c.getUser();
+					User user=users.get(c.getUser());
+					if(user != null) {
+						icon=user.getIcon();
+					}
 					sc.add(new UStoryComment(stories.get(c.getStoryId()), c,
+						icon,
 						c.getUser().toLowerCase().equals(u.toLowerCase())));
 				}
 			}
@@ -44,8 +52,9 @@ public class UserCommentsDisplayServlet extends BaseDiggServlet {
 	public static class UStoryComment extends StoryComment {
 		private boolean isCurrentUser;
 
-		public UStoryComment(Story s, Comment c, boolean currentUser) {
-			super(s, c);
+		public UStoryComment(Story s, Comment c, String icon,
+				boolean currentUser) {
+			super(s, c, icon);
 			isCurrentUser=currentUser;
 		}
 		public boolean getIsCurrentUser() {

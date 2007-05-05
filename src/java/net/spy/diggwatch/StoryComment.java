@@ -12,19 +12,24 @@ import net.spy.digg.Story;
 public class StoryComment {
 	private Story story=null;
 	private Comment comment=null;
-	public StoryComment(Story s, Comment c) {
+	private String iconUrl;
+	public StoryComment(Story s, Comment c, String url) {
 		super();
 		assert s != null;
 		assert c != null;
+		assert url != null;
 		story = s;
 		comment = c;
-		story.getDiggLink();
+		iconUrl = url;
 	}
 	public Comment getComment() {
 		return comment;
 	}
 	public Story getStory() {
 		return story;
+	}
+	public String getIconUrl() {
+		return iconUrl;
 	}
 	public String getFormattedComment() {
 		return comment.getComment().replace("\n", "<br/>\n");

@@ -32,7 +32,7 @@
 				by <a href="<c:out value='${sc.comment.user}'/>">
 					<c:out value='${sc.comment.user}'/>
 					<img alt="icon" class="replyicon" width="24" height="24"
-						src="/diggwatch/icon/<c:out value='${sc.comment.user}'/>"/></a>
+						src="<c:out value='${sc.iconUrl}'/>"/></a>
 				(+<c:out value="${sc.comment.diggsUp}"/>/-<c:out
 					value="${sc.comment.diggsDown}"/>)
 			</h2>
