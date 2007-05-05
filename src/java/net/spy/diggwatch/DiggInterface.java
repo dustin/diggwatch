@@ -2,9 +2,11 @@ package net.spy.diggwatch;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -19,6 +21,7 @@ import net.spy.digg.PagingParameters;
 import net.spy.digg.Story;
 import net.spy.digg.StoryParameters;
 import net.spy.digg.User;
+import net.spy.digg.UserParameters;
 import net.spy.memcached.AddrUtil;
 import net.spy.memcached.MemcachedClient;
 
@@ -39,6 +42,8 @@ public class DiggInterface extends SpyObject {
 	private static final int NEG_STORY_TIME = 86400;
 	// How long incremental comments are cached (invalidated by story comments)
 	private static final int COMMENT_REPLY_TIME = 86400;
+	// How long friends of a user are cached
+	private static final int USER_FRIEND_TIME = 86400;
 	// How long to cache users
 	private static final int USER_TIME = 3600;
 
@@ -88,6 +93,59 @@ public class DiggInterface extends SpyObject {
 			rv=digg.getUser(username);
 			mc.set(key, USER_TIME, rv);
 		}
+		return rv;
+	}
+
+	/**
+	 * Get all the comments for all the given users.
+	 */
+	public Map<String, Collection<Comment>> getUsersComments(
+			Collection<String> users) throws Exception {
+		String baseKey="digg/comments/user/";
+		Collection<String> keys=new HashSet<String>(users.size());
+		for(String u : users) {
+			keys.add(u);
+		}
+		Map<String, Object> mcResult = mc.getBulk(keys);
+		Map<String, Collection<Comment>> rv=
+			new HashMap<String, Collection<Comment>>();
+		for(Map.Entry<String, Object> me : mcResult.entrySet()) {
+			assert me.getKey().startsWith(baseKey);
+			String u=me.getKey().substring(baseKey.length());
+			assert !u.startsWith("/");
+			@SuppressWarnings("unchecked") // generic cast
+			Collection<Comment> v=(Collection<Comment>)me.getValue();
+			rv.put(u, v);
+		}
+		Collection<String> remainingUsers=new HashSet<String>(users);
+		remainingUsers.removeAll(rv.keySet());
+
+		assert remainingUsers.size() <= 100 : "Too many remaining users";
+		Map<String, Collection<Comment>> newItems=
+			new HashMap<String, Collection<Comment>>();
+		EventParameters p=new EventParameters();
+		p.setMinDate(System.currentTimeMillis() - MIN_COMMENT_AGE);
+		p.setCount(NUM_USER_COMMENTS);
+
+		// This doesn't work...
+		// PagedItems<Comment> comments = digg.getUserComments(users, p);
+		for(String u : users) {
+			for(Comment c : getUserComments(u)) {
+				Collection<Comment> col=newItems.get(c.getUser());
+				if(col == null) {
+					col=new ArrayList<Comment>();
+					newItems.put(c.getUser(), col);
+				}
+				col.add(c);
+			}
+		}
+
+		// Cache the newly found items. -- If the users comments worked...
+		// for(Map.Entry<String, Collection<Comment>> me : newItems.entrySet()) {
+		// 	mc.set(baseKey + me.getKey(), USER_COMMENTS_TIME, me.getValue());
+		// }
+
+		rv.putAll(newItems);
 		return rv;
 	}
 
@@ -320,6 +378,40 @@ public class DiggInterface extends SpyObject {
 		}
 		Collection<Comment> rv=new TreeSet<Comment>(new CommentComparator());
 		rv.addAll(comments);
+		return rv;
+	}
+
+	public Collection<Comment> getCommentsFromFriends(String user)
+		throws Exception {
+		String friendKey="/digg/comments/friends/" + user;
+		@SuppressWarnings("unchecked") // generic cast
+		List<String> friends=(List<String>)mc.get(friendKey);
+		if(friends == null) {
+			UserParameters p=new UserParameters();
+			p.setCount(PagingParameters.MAX_COUNT);
+			PagedItems<User> friendObs = digg.getFriends(user, p);
+			if(friendObs.getTotal() > friendObs.size()) {
+				getLogger().warn("User %s has %d friends", user,
+					friendObs.getTotal());
+			}
+			friends=new ArrayList<String>(friendObs.size());
+			for(User u : friendObs) {
+				friends.add(u.getName());
+			}
+			mc.set(friendKey, USER_FRIEND_TIME, friends);
+		}
+		assert friends.size() <= 100 : "Too many users.";
+		List<Comment> rv=new ArrayList<Comment>();
+		for(Map.Entry<String, Collection<Comment>> me
+			: getUsersComments(friends).entrySet()) {
+			rv.addAll(me.getValue());
+		}
+		Collections.sort(rv, new CommentComparator());
+		getLogger().info("Found %d comments for friends of %s", rv.size(),
+			user);
+		if(rv.size() > NUM_USER_COMMENTS) {
+			rv=rv.subList(0, NUM_USER_COMMENTS);
+		}
 		return rv;
 	}
 

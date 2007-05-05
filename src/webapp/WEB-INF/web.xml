@@ -16,6 +16,11 @@
 		<servlet-class>net.spy.diggwatch.UserCommentRSSServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>userFCommentRss</servlet-name>
+		<servlet-class>net.spy.diggwatch.UserFriendCommentRSSServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
 	<servlet>
 		<servlet-name>domainCommentRss</servlet-name>
@@ -32,6 +37,12 @@
 	<servlet>
 		<servlet-name>userCommentDisplay</servlet-name>
 		<servlet-class>net.spy.diggwatch.UserCommentsDisplayServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>userFriendCommentDisplay</servlet-name>
+		<servlet-class>net.spy.diggwatch.UserFriendCommentsDisplayServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
@@ -65,6 +76,28 @@
 		<init-param>
 			<param-name>dError</param-name>
 			<param-value>/diggwatch/?userError=</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>userFRedir</servlet-name>
+		<servlet-class>net.spy.diggwatch.UserRedirectServlet</servlet-class>
+		<init-param>
+			<param-name>destination</param-name>
+			<param-value>/diggwatch/fcomments/</param-value>
+		</init-param>
+		<init-param>
+			<param-name>validName</param-name>
+			<param-value>username</param-value>
+		</init-param>
+		<init-param>
+			<param-name>noSuch</param-name>
+			<param-value>No such user</param-value>
+		</init-param>
+		<init-param>
+			<param-name>dError</param-name>
+			<param-value>/diggwatch/?userFError=</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -124,6 +157,10 @@
 		<url-pattern>/rss/comments/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
+		<servlet-name>userFCommentRss</servlet-name>
+		<url-pattern>/rss/fcomments/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>domainRss</servlet-name>
 		<url-pattern>/rss/domain/*</url-pattern>
 	</servlet-mapping>
@@ -136,6 +173,10 @@
 		<url-pattern>/comments/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
+		<servlet-name>userFriendCommentDisplay</servlet-name>
+		<url-pattern>/fcomments/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>domainCommentDisplay</servlet-name>
 		<url-pattern>/domainComments/*</url-pattern>
 	</servlet-mapping>
@@ -146,6 +187,10 @@
 	<servlet-mapping>
 		<servlet-name>userRedir</servlet-name>
 		<url-pattern>/ur</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>userFRedir</servlet-name>
+		<url-pattern>/ufr</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>domainCommentsRedir</servlet-name>

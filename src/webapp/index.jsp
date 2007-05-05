@@ -9,16 +9,18 @@
 		<title>Diggwatcher</title>
 		<link rel="stylesheet" href="/diggwatch/style.css"/>
 	</head>
-	<body>
+	<body id="index">
 		<p class="descr">
 			This application is used to find, browse and track (via RSS) your digg
 			comments and their replies over the last 14 days.
 		</p>
+		<hr/>
 		<p>
 			<c:if test="${not empty param.error}">
 				<p class="error">Internal Error:  <c:out value="${param.error}"/></p>
 			</c:if>
 		</p>
+		<h1>Track Your Threads</h1>
 		<form method="get" action="ur">
 			<c:if test="${not empty param.userError}">
 				<p class="error">Digg Error:  <c:out value="${param.userError}"/></p>
@@ -28,9 +30,22 @@
 			</p>
 		</form>
 		<hr/>
+		<h1>Track Your Friend's Comments</h1>
 		<p class="descr">
-			...or track any article linking to a particular domain.
+			This will look for any comments posted by any of your friends in the last
+			fourteen days.  Due to limitations in the digg API, this will not be very
+			fast if you have a lot of friends.  Your RSS reader shouldn't mind.
 		</p>
+		<form method="get" action="ufr">
+			<c:if test="${not empty param.userFError}">
+				<p class="error">Digg Error:  <c:out value="${param.userFError}"/></p>
+			</c:if>
+			<p>
+				Enter your digg username: <input type="text" name="p"/>
+			</p>
+		</form>
+		<hr/>
+		<h1>Track Stories Posted from a Specific Domain</h1>
 		<form method="get" action="dr">
 			<c:if test="${not empty param.domainError}">
 				<p class="error">Digg Error:  <c:out value="${param.domainError}"/></p>
@@ -40,10 +55,7 @@
 			</p>
 		</form>
 		<hr/>
-		<p class="descr">
-			...or track <em>comments</em> on any article linking to a particular
-			domain.
-		</p>
+		<h1>Track Comments to Stories Posted from a Specific Domain</h1>
 		<form method="get" action="dcr">
 			<c:if test="${not empty param.domainCommentsError}">
 				<p class="error">Digg Error:  <c:out value="${param.domainCommentsError}"/></p>

@@ -36,6 +36,10 @@ h2 {
   color: green;
 }
 
+#index h1 {
+	font-size: medium;
+}
+
 p.comment {
   margin: 2em;
 }
