@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import com.google.inject.Inject;
+
 import net.spy.digg.Comment;
 import net.spy.digg.DiggException;
 import net.spy.digg.Story;
@@ -19,6 +21,9 @@ public class CommentFeed extends RSSChannel {
 	protected String path=null;
 	private Collection<Comment> comments=null;
 
+	@Inject
+	static DiggInterface di;
+
 	public CommentFeed(String p, String title, Collection<Comment> c) {
 		super(p + " @ digg", BASE_URL + "comments/" + p, title);
 		path=p;
@@ -29,7 +34,6 @@ public class CommentFeed extends RSSChannel {
 	protected Collection<? extends RSSItem> getItems() {
 		Collection<RSSItem> rv=new ArrayList<RSSItem>(
 			comments.size());
-		DiggInterface di=DiggInterface.getInstance();
 		for(Comment c : comments) {
 			try {
 				try {
@@ -72,8 +76,7 @@ public class CommentFeed extends RSSChannel {
 			if(!path.toLowerCase().equals(comment.getUser().toLowerCase())) {
 				String icon="http://bleu.west.spy.net/diggwatch/icon/"
 					+ comment.getUser();
-				User user = DiggInterface.getInstance().getUserFromCache(
-					comment.getUser());
+				User user = di.getUserFromCache(comment.getUser());
 				if(user != null) {
 					icon=user.getIcon();
 				}

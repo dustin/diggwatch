@@ -2,11 +2,15 @@ package net.spy.diggwatch;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 
 import net.spy.jwebkit.xml.XMLOutputServlet;
 
@@ -16,7 +20,20 @@ import net.spy.jwebkit.xml.XMLOutputServlet;
 public abstract class BaseDiggServlet extends XMLOutputServlet {
 
 	@Inject
-	protected static DiggInterface di;
+	protected DiggInterface di;
+
+	@Override
+	public void init(ServletConfig conf) throws ServletException {
+		super.init(conf);
+
+	    ServletContext servletContext = conf.getServletContext();
+	    Injector injector = (Injector)
+	        servletContext.getAttribute(ContextListener.INJECTOR_NAME);
+	    if (injector == null) {
+	      throw new UnavailableException("No guice injector found");
+	    }
+	    injector.injectMembers(this);
+	}
 
 	@Override
 	protected final void doGet(HttpServletRequest req, HttpServletResponse res)

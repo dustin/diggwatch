@@ -4,6 +4,7 @@ import javax.servlet.ServletContextEvent;
 
 import com.google.inject.Binder;
 import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.ServletModule;
 
@@ -18,6 +19,11 @@ import net.spy.memcached.MemcachedClient;
 public class ContextListener extends JWServletContextListener
 	implements Module {
 
+	/**
+	 * Name of the injector.
+	 */
+	public static final String INJECTOR_NAME = Injector.class.getName();
+
 	private static final String APP_KEY="http://bleu.west.spy.net/diggwatch/";
 
 	private MemcachedClient mc=null;
@@ -29,12 +35,14 @@ public class ContextListener extends JWServletContextListener
 			"red:11211 purple:11211"));
 
 		// Perform all of the injection.
-		Guice.createInjector(new ServletModule(), this);
+		Injector injector = Guice.createInjector(new ServletModule(), this);
+		sce.getServletContext().setAttribute(INJECTOR_NAME, injector);
 	}
 
 	@Override
 	protected void ctxDestroy(ServletContextEvent sce) throws Exception {
 		mc.shutdown();
+		sce.getServletContext().removeAttribute(INJECTOR_NAME);
 		super.ctxDestroy(sce);
 	}
 
@@ -42,8 +50,6 @@ public class ContextListener extends JWServletContextListener
 		binder.bind(Digg.class).toInstance(new Digg(APP_KEY));
 		binder.bind(MemcachedClient.class).toInstance(mc);
 
-		binder.requestStaticInjection(DiggInterface.class);
-		binder.requestStaticInjection(BaseDiggServlet.class);
-		binder.requestStaticInjection(RedirectServlet.class);
+		binder.requestStaticInjection(CommentFeed.class);
 	}
 }

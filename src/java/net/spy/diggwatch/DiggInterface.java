@@ -53,20 +53,9 @@ public class DiggInterface extends SpyObject {
 	private static final long MIN_COMMENT_AGE = 86400*14*1000;
 
 	@Inject
-	private static DiggInterface instance;
-
-	@Inject
 	private Digg digg;
 	@Inject
 	private MemcachedClient mc;
-
-	/**
-	 * Get the singleton digg interface.
-	 */
-	public static DiggInterface getInstance() {
-		assert instance != null : "Not initialized";
-		return instance;
-	}
 
 	/**
 	 * Get the user with the given username.
