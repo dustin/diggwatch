@@ -6,12 +6,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.inject.Inject;
+
 import net.spy.jwebkit.xml.XMLOutputServlet;
 
 /**
  * Base REST servlet stuff.
  */
 public abstract class BaseDiggServlet extends XMLOutputServlet {
+
+	@Inject
+	protected static DiggInterface di;
 
 	@Override
 	protected final void doGet(HttpServletRequest req, HttpServletResponse res)

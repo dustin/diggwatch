@@ -16,7 +16,6 @@ public class UserCommentRSSServlet extends BaseDiggServlet {
 	@Override
 	protected void processPath(String path,
 		HttpServletRequest req, HttpServletResponse res) throws Exception {
-		DiggInterface di=DiggInterface.getInstance();
 		List<Comment> comments = new ArrayList<Comment>(
 			di.getRelevantComments(path));
 		sendXml(new CommentFeed(path, path

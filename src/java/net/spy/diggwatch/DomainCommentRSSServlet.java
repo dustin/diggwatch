@@ -20,7 +20,6 @@ public class DomainCommentRSSServlet extends BaseDiggServlet {
 	@Override
 	protected void processPath(String path,
 		HttpServletRequest req, HttpServletResponse res) throws Exception {
-		DiggInterface di=DiggInterface.getInstance();
 		List<Comment> comments = new ArrayList<Comment>(
 			di.getCommentsForDomain(path));
 		sendXml(new DomainCommentFeed(path,

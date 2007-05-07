@@ -21,7 +21,6 @@ public class DomainCommentsDisplayServlet extends BaseDiggServlet {
 	protected void processPath(String path, HttpServletRequest req,
 			HttpServletResponse res) throws Exception {
 		req.setAttribute("domain", path);
-		DiggInterface di=DiggInterface.getInstance();
 		Collection<Comment> comments=di.getCommentsForDomain(path);
 		if(comments.isEmpty()) {
 			req.getRequestDispatcher("/nodcomments.jsp").forward(req, res);

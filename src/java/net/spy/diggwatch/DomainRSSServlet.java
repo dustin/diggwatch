@@ -16,7 +16,6 @@ public class DomainRSSServlet extends BaseDiggServlet {
 	@Override
 	protected void processPath(String path, HttpServletRequest req,
 			HttpServletResponse res) throws Exception {
-		DiggInterface di=DiggInterface.getInstance();
 		Collection<Story> stories = di.getStoriesForDomain(path);
 		sendXml(new DomainCommentFeed(path,
 			"Stories linking to " + path + " on digg", stories), res);

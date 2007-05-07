@@ -17,7 +17,6 @@ public class UserFriendCommentRSSServlet extends BaseDiggServlet {
 	@Override
 	protected void processPath(String user, HttpServletRequest req,
 			HttpServletResponse res) throws Exception {
-			DiggInterface di=DiggInterface.getInstance();
 			List<Comment> comments = new ArrayList<Comment>(
 				di.getCommentsFromFriends(user));
 			sendXml(new FriendCommentFeed("friends of " + user,

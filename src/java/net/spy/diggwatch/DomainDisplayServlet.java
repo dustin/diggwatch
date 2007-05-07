@@ -13,8 +13,7 @@ public class DomainDisplayServlet extends BaseDiggServlet {
 	protected void processPath(String path, HttpServletRequest req,
 			HttpServletResponse res) throws Exception {
 		req.setAttribute("domain", path);
-		Collection<Story> stories =
-			DiggInterface.getInstance().getStoriesForDomain(path);
+		Collection<Story> stories = di.getStoriesForDomain(path);
 		if(stories.isEmpty()) {
 			req.getRequestDispatcher("/nodomain.jsp").forward(req, res);
 		} else {

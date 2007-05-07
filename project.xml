@@ -88,6 +88,20 @@
 			<version>1.3</version>
 		</dependency>
 
+		<!-- Guice -->
+		<dependency>
+			<groupId>google</groupId>
+			<artifactId>guice</artifactId>
+			<version>1.0</version>
+			<properties><war.bundle>true</war.bundle></properties>
+		</dependency>
+		<dependency>
+			<groupId>google</groupId>
+			<artifactId>guice-servlet</artifactId>
+			<version>1.0</version>
+			<properties><war.bundle>true</war.bundle></properties>
+		</dependency>
+
 		<!-- jstl -->
 		<dependency>
 			<groupId>jstl</groupId>

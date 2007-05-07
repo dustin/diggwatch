@@ -21,12 +21,10 @@ public class UserCommentsDisplayServlet extends BaseDiggServlet {
 	protected void processPath(String u, HttpServletRequest req,
 			HttpServletResponse res) throws Exception {
 		req.setAttribute("username", u);
-		Collection<Comment> comments =
-			DiggInterface.getInstance().getRelevantComments(u);
+		Collection<Comment> comments = di.getRelevantComments(u);
 		if(comments.isEmpty()) {
 			req.getRequestDispatcher("/nocomments.jsp").forward(req, res);
 		} else {
-			DiggInterface di=DiggInterface.getInstance();
 			Map<String, User> users = di.getCachedUsersForComments(comments);
 			Map<Integer, Story> stories = di.getStoriesForComments(comments);
 			List<StoryComment> sc=new ArrayList<StoryComment>(comments.size());

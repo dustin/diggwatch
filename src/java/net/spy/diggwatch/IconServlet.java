@@ -13,7 +13,7 @@ public class IconServlet extends BaseDiggServlet {
 	@Override
 	protected void processPath(String u,
 		HttpServletRequest req, HttpServletResponse res) throws Exception {
-		User user=DiggInterface.getInstance().getUser(u);
+		User user=di.getUser(u);
 		res.sendRedirect(user.getIcon());
 	}
 

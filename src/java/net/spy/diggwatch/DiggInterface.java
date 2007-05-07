@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.google.inject.Inject;
+
 import net.spy.SpyObject;
 import net.spy.digg.Comment;
 import net.spy.digg.Digg;
@@ -22,15 +24,12 @@ import net.spy.digg.Story;
 import net.spy.digg.StoryParameters;
 import net.spy.digg.User;
 import net.spy.digg.UserParameters;
-import net.spy.memcached.AddrUtil;
 import net.spy.memcached.MemcachedClient;
 
 /**
  * Interface to digg.
  */
 public class DiggInterface extends SpyObject {
-
-	private static final String APP_KEY="http://bleu.west.spy.net/diggwatch/";
 
 	// How long to cache user comments.
 	private static final int USER_COMMENTS_TIME = 60;
@@ -53,10 +52,13 @@ public class DiggInterface extends SpyObject {
 	// How far back to go for user comments (ms). (two weeks should be enough)
 	private static final long MIN_COMMENT_AGE = 86400*14*1000;
 
-	private static DiggInterface instance=null;
+	@Inject
+	private static DiggInterface instance;
 
-	private Digg digg=new Digg(APP_KEY);
-	private MemcachedClient mc=null;
+	@Inject
+	private Digg digg;
+	@Inject
+	private MemcachedClient mc;
 
 	/**
 	 * Get the singleton digg interface.
@@ -64,23 +66,6 @@ public class DiggInterface extends SpyObject {
 	public static DiggInterface getInstance() {
 		assert instance != null : "Not initialized";
 		return instance;
-	}
-
-	/**
-	 * Initialize the digg interface.
-	 */
-	public static void initialize() throws Exception {
-		instance=new DiggInterface();
-		instance.mc=new MemcachedClient(AddrUtil.getAddresses(
-				"red:11211 purple:11211"));
-	}
-
-	/**
-	 * Sht down the digg interface.
-	 */
-	public static void shutdown() {
-		instance.mc.shutdown();
-		instance=null;
 	}
 
 	/**
@@ -378,9 +363,8 @@ public class DiggInterface extends SpyObject {
 
 		Collection<Comment> rv=new ArrayList<Comment>();
 
-		DiggInterface di=DiggInterface.getInstance();
 		for(Comment c : comments) {
-			rv.addAll(di.getReplies(c));
+			rv.addAll(getReplies(c));
 		}
 
 		return rv;

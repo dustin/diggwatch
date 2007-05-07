@@ -8,6 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.inject.Inject;
+
 import net.spy.digg.DiggException;
 import net.spy.jwebkit.JWHttpServlet;
 
@@ -20,6 +22,9 @@ public class RedirectServlet extends JWHttpServlet {
 	private String validName="username";
 	private String noSuch="No such user";
 	private String dError = "/diggwatch/?derror=";
+
+	@Inject
+	protected static DiggInterface di;
 
 	@Override
 	public void init(ServletConfig conf) throws ServletException {
