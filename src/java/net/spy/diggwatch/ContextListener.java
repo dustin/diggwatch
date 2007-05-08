@@ -6,6 +6,7 @@ import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.Provider;
 import com.google.inject.servlet.ServletModule;
 
 import net.spy.digg.Digg;
@@ -47,7 +48,11 @@ public class ContextListener extends JWServletContextListener
 	}
 
 	public void configure(Binder binder) {
-		binder.bind(Digg.class).toInstance(new Digg(APP_KEY));
+		binder.bind(Digg.class).toProvider(new Provider<Digg>(){
+			public Digg get() {
+				return new Digg(APP_KEY);
+			}
+		});
 		binder.bind(MemcachedClient.class).toInstance(mc);
 
 		binder.requestStaticInjection(CommentFeed.class);

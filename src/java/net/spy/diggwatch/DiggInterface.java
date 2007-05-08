@@ -52,10 +52,15 @@ public class DiggInterface extends SpyObject {
 	// How far back to go for user comments (ms). (two weeks should be enough)
 	private static final long MIN_COMMENT_AGE = 86400*14*1000;
 
+	private final Digg digg;
+	private final MemcachedClient mc;
+
 	@Inject
-	private Digg digg;
-	@Inject
-	private MemcachedClient mc;
+	public DiggInterface(Digg d, MemcachedClient mclient) {
+		super();
+		digg=d;
+		mc=mclient;
+	}
 
 	/**
 	 * Get the user with the given username.
