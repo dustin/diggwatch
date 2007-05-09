@@ -30,7 +30,7 @@
 			</p>
 		</form>
 		<hr/>
-		<h1>Track Your Friend's Comments</h1>
+		<h1>Track Your Friends' Comments</h1>
 		<p class="descr">
 			This will look for any comments posted by any of your friends in the last
 			fourteen days.  Due to limitations in the digg API, this will not be very
