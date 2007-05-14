@@ -315,26 +315,37 @@ public class DiggInterface extends SpyObject {
 	 * Get potential replies to the given comment.
 	 */
 	public Collection<Comment> getReplies(Comment c) throws Exception {
-		Story story=getStory(c.getStoryId());
-		int repId=c.getReplyId() == null ? c.getEventId() : c.getReplyId();
-		String key="digg/comments/replies/" + c.getStoryId() + "."
+		Collection<Comment> rv=null;
+		try {
+			Story story=getStory(c.getStoryId());
+			int repId=c.getReplyId() == null ? c.getEventId() : c.getReplyId();
+			String key="digg/comments/replies/" + c.getStoryId() + "."
 			+ story.getComments() + "/" + repId;
-		@SuppressWarnings("unchecked") // parameterized cast
-		Collection<Comment> rv=(Collection<Comment>) mc.get(key);
-		if(rv == null) {
-			EventParameters ep=new EventParameters();
-			ep.setCount(PagingParameters.MAX_COUNT);
-			rv=digg.getCommentReplies(c.getStoryId(), repId, ep);
-			mc.set(key, COMMENT_REPLY_TIME, rv);
-		}
-		// Filter it since we cache all of them.
-		ArrayList<Comment> frv=new ArrayList<Comment>();
-		for(Comment rc : rv) {
-			if(rc.getTimestamp() > c.getTimestamp()) {
-				frv.add(rc);
+			@SuppressWarnings("unchecked") // parameterized cast
+			Collection<Comment> cached=(Collection<Comment>) mc.get(key);
+			if(cached == null) {
+				EventParameters ep=new EventParameters();
+				ep.setCount(PagingParameters.MAX_COUNT);
+				cached=digg.getCommentReplies(c.getStoryId(), repId, ep);
+				mc.set(key, COMMENT_REPLY_TIME, cached);
+			}
+			// Filter it since we cache all of them.
+			ArrayList<Comment> frv=new ArrayList<Comment>();
+			for(Comment rc : cached) {
+				if(rc.getTimestamp() > c.getTimestamp()) {
+					frv.add(rc);
+				}
+			}
+			rv=frv;
+		} catch(DiggException e) {
+			if(e.getErrorId() == 1008) { // deleted story
+				getLogger().info("Story #%d has been deleted", c.getStoryId());
+				rv=Collections.emptyList();
+			} else {
+				throw e;
 			}
 		}
-		return frv;
+		return rv;
 	}
 
 	/**
