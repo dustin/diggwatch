@@ -12,6 +12,7 @@
 		<link rel="alternate" type="application/rss+xml"
 		   href="/diggwatch/rss/fcomments/<c:out value='${username}'/>"
 			 title="RSS feed for <c:out value='${username}'/> @ digg"/>
+		<meta name="robots" content="noindex,nofollow" />
 	</head>
 	<body>
 		<h1>

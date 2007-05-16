@@ -13,6 +13,7 @@
 		<link rel="alternate" type="application/rss+xml"
 		   href="/diggwatch/rss/domainComments/<c:out value='${domain}'/>"
 			 title="RSS feed for <c:out value='${domain}'/> @ digg"/>
+		<meta name="robots" content="noindex,nofollow" />
 	</head>
 	<body>
 		<h1>
