@@ -11,14 +11,14 @@
 		</title>
 		<link rel="stylesheet" href="/diggwatch/style.css"/>
 		<link rel="alternate" type="application/rss+xml"
-		   href="/diggwatch/rss/fcomments/<c:out value='${domain}'/>"
-			 title="RSS feed for <c:out value='${domain}'/> @ digg"/>
+		   href="/diggwatch/rss/fcomments/<c:out value='${username}'/>"
+			 title="RSS feed for friends of <c:out value='${username}'/> @ digg"/>
 		<meta name="robots" content="noindex,nofollow" />
 	</head>
 	<body>
 		<h1>
-			No recent comments by friends of <c:out value="${domain}"/> found
-			<a href="/diggwatch/rss/fcomments/<c:out value='${domain}'/>"><img
+			No recent comments by friends of <c:out value="${username}"/> found
+			<a href="/diggwatch/rss/fcomments/<c:out value='${username}'/>"><img
 				src="http://media.west.spy.net/img/rss-icon.png"
 				alt="rss"/></a></h1>
 		<jsp:include page="footer.jsp"/>
