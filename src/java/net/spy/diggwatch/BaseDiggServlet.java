@@ -1,6 +1,9 @@
 package net.spy.diggwatch;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashSet;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -12,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import net.spy.digg.Event;
 import net.spy.jwebkit.xml.XMLOutputServlet;
 
 /**
@@ -45,8 +49,25 @@ public abstract class BaseDiggServlet extends XMLOutputServlet {
 		} else {
 			assert pi.startsWith("/");
 			String path=pi.substring(1).trim();
+
+			@SuppressWarnings("unchecked") // generic enum
+			Enumeration<String> etagsEnum = req.getHeaders("If-None-Match");
+			Collection<String> eTags=new HashSet<String>();
+			// I generally hate reinventing for loops, but I needed the @suppress
+			while(etagsEnum.hasMoreElements()) {
+				eTags.add(etagsEnum.nextElement());
+			}
+
 			try {
-				processPath(path, req, res);
+				String eTag=getEtag(path);
+				if(eTag != null && eTags.contains(eTag)) {
+					res.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+				} else {
+					if(eTag != null) {
+						res.setHeader("ETag", eTag);
+					}
+					processPath(path, req, res);
+				}
 			} catch(Exception e) {
 				throw new ServletException("Error processing path " + path, e);
 			}
@@ -54,8 +75,26 @@ public abstract class BaseDiggServlet extends XMLOutputServlet {
 	}
 
 	/**
+	 * Compute an etag from the given ordered collection of events.
+	 */
+	protected String getEtagFromEvents(Collection<? extends Event> events) {
+		String rv="0";
+		if(!events.isEmpty()) {
+			Event event=events.iterator().next();
+			rv=(event.getTimestamp() / 1000) + "-" + event.getEventId();
+		}
+		return rv;
+	}
+
+	/**
 	 * Process the given path.
 	 */
 	protected abstract void processPath(String path, HttpServletRequest req,
 		HttpServletResponse res) throws Exception;
+
+	/**
+	 * Get the etag for the given path.
+	 */
+	protected abstract String getEtag(String path) throws Exception;
+
 }

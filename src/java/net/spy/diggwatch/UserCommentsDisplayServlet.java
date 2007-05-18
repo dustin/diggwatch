@@ -47,6 +47,11 @@ public class UserCommentsDisplayServlet extends BaseDiggServlet {
 		}
 	}
 
+	@Override
+	protected String getEtag(String path) throws Exception {
+		return getEtagFromEvents(di.getRelevantComments(path));
+	}
+
 	public static class UStoryComment extends StoryComment {
 		private boolean isCurrentUser;
 
@@ -59,4 +64,5 @@ public class UserCommentsDisplayServlet extends BaseDiggServlet {
 			return isCurrentUser;
 		}
 	}
+
 }

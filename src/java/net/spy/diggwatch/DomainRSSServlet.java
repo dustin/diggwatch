@@ -21,6 +21,16 @@ public class DomainRSSServlet extends BaseDiggServlet {
 			"Stories linking to " + path + " on digg", stories), res);
 	}
 
+	@Override
+	protected String getEtag(String path) throws Exception {
+		Collection<Story> stories = di.getStoriesForDomain(path);
+		String rv="0";
+		if(!stories.isEmpty()) {
+			Story s=stories.iterator().next();
+			rv = String.valueOf(s.getId());
+		}
+		return rv;
+	}
 
 	private static class DomainCommentFeed extends RSSChannel {
 		private Collection<Story> stories=null;
@@ -63,4 +73,5 @@ public class DomainRSSServlet extends BaseDiggServlet {
 			return story.getTitle();
 		}
 	}
+
 }

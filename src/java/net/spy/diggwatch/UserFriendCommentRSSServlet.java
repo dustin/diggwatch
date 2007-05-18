@@ -17,37 +17,42 @@ public class UserFriendCommentRSSServlet extends BaseDiggServlet {
 	@Override
 	protected void processPath(String user, HttpServletRequest req,
 			HttpServletResponse res) throws Exception {
-			List<Comment> comments = new ArrayList<Comment>(
-				di.getCommentsFromFriends(user));
-			sendXml(new FriendCommentFeed("friends of " + user,
-					"Comments from friends of " + user, comments), res);
+		List<Comment> comments = new ArrayList<Comment>(
+			di.getCommentsFromFriends(user));
+		sendXml(new FriendCommentFeed("friends of " + user,
+				"Comments from friends of " + user, comments), res);
+	}
+
+	@Override
+	protected String getEtag(String path) throws Exception {
+		return getEtagFromEvents(di.getCommentsFromFriends(path));
+	}
+
+	public static class FriendCommentFeed extends CommentFeed {
+		public FriendCommentFeed(String p, String title, Collection<Comment> c) {
+			super(p, title, c);
 		}
 
-		public static class FriendCommentFeed extends CommentFeed {
-			public FriendCommentFeed(String p, String title,
-					Collection<Comment> c) {
-				super(p, title, c);
-			}
-			@Override
-			protected RSSItem adaptComment(Story s, Comment c) {
-				return new FriendCommentAdaptor(path, s, c);
-			}
+		@Override
+		protected RSSItem adaptComment(Story s, Comment c) {
+			return new FriendCommentAdaptor(path, s, c);
+		}
+	}
+
+	public static class FriendCommentAdaptor extends CommentAdaptor {
+
+		public FriendCommentAdaptor(String domain, Story s, Comment c) {
+			super(domain, s, c);
 		}
 
-		public static class FriendCommentAdaptor extends CommentAdaptor {
-
-			public FriendCommentAdaptor(String domain, Story s, Comment c) {
-				super(domain, s, c);
-			}
-
-			@Override
-			public String getTitle() {
-				String rv="Comment on ``"
-					+ story.getTitle() + "'' by " + comment.getUser() + " (+"
-					+ comment.getDiggsUp() + "/-" + comment.getDiggsDown()
-					+ ")";
-				return rv;
-			}
-			
+		@Override
+		public String getTitle() {
+			String rv = "Comment on ``" + story.getTitle() + "'' by "
+					+ comment.getUser() + " (+" + comment.getDiggsUp() + "/-"
+					+ comment.getDiggsDown() + ")";
+			return rv;
 		}
+
+	}
+
 }

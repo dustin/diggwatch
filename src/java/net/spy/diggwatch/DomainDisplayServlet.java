@@ -22,4 +22,14 @@ public class DomainDisplayServlet extends BaseDiggServlet {
 		}
 	}
 
+	@Override
+	protected String getEtag(String path) throws Exception {
+		String rv="0";
+		Collection<Story> stories = di.getStoriesForDomain(path);
+		if(!stories.isEmpty()) {
+			rv=String.valueOf(stories.iterator().next().getId());
+		}
+		return rv;
+	}
+
 }

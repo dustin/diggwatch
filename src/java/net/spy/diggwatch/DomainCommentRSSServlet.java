@@ -25,6 +25,10 @@ public class DomainCommentRSSServlet extends BaseDiggServlet {
 		sendXml(new DomainCommentFeed(path,
 				"Comments on articles from " + path, comments), res);
 	}
+	@Override
+	protected String getEtag(String path) throws Exception {
+		return getEtagFromEvents(di.getCommentsForDomain(path));
+	}
 
 	public static class DomainCommentFeed extends CommentFeed {
 		public DomainCommentFeed(String p, String title,

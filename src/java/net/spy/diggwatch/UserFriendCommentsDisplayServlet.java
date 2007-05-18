@@ -43,4 +43,9 @@ public class UserFriendCommentsDisplayServlet extends BaseDiggServlet {
 		}
 	}
 
+	@Override
+	protected String getEtag(String path) throws Exception {
+		return getEtagFromEvents(di.getCommentsFromFriends(path));
+	}
+
 }

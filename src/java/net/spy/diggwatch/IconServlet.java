@@ -17,4 +17,9 @@ public class IconServlet extends BaseDiggServlet {
 		res.sendRedirect(user.getIcon());
 	}
 
+	@Override
+	protected String getEtag(String path) throws Exception {
+		return null;
+	}
+
 }
