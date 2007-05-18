@@ -26,6 +26,8 @@ public abstract class BaseDiggServlet extends XMLOutputServlet {
 	@Inject
 	protected DiggInterface di;
 
+	private String etagBase=null;
+
 	@Override
 	public void init(ServletConfig conf) throws ServletException {
 		super.init(conf);
@@ -37,6 +39,8 @@ public abstract class BaseDiggServlet extends XMLOutputServlet {
 	      throw new UnavailableException("No guice injector found");
 	    }
 	    injector.injectMembers(this);
+
+	    etagBase=String.valueOf(System.currentTimeMillis());
 	}
 
 	@Override
@@ -60,13 +64,16 @@ public abstract class BaseDiggServlet extends XMLOutputServlet {
 
 			try {
 				String eTag=getEtag(path);
-				if(eTag != null && eTags.contains(eTag)) {
-					res.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-				} else {
-					if(eTag != null) {
-						res.setHeader("ETag", eTag);
-					}
+				if(eTag == null) {
 					processPath(path, req, res);
+				} else {
+					eTag = etagBase + "." + eTag;
+					if(eTags.contains(eTag)) {
+						res.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+					} else {
+						res.setHeader("ETag", eTag);
+						processPath(path, req, res);
+					}
 				}
 			} catch(Exception e) {
 				throw new ServletException("Error processing path " + path, e);
