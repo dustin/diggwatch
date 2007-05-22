@@ -1,5 +1,9 @@
 package net.spy.diggwatch;
 
+import static com.google.inject.name.Names.named;
+
+import java.util.ResourceBundle;
+
 import javax.servlet.ServletContextEvent;
 
 import com.google.inject.Binder;
@@ -27,7 +31,7 @@ public class ContextListener extends JWServletContextListener
 
 	private static final String APP_KEY="http://bleu.west.spy.net/diggwatch/";
 
-	private MemcachedClient mc=null;
+	private MemcachedClient mc;
 
 	@Override
 	protected void ctxInit(ServletContextEvent sce) throws Exception {
@@ -53,7 +57,13 @@ public class ContextListener extends JWServletContextListener
 				return new Digg(APP_KEY);
 			}
 		});
+
+        ResourceBundle rb=ResourceBundle.getBundle(
+        	"net.spy.diggwatch.diggwatch");
+
 		binder.bind(MemcachedClient.class).toInstance(mc);
+		binder.bind(String.class).annotatedWith(named("tree.version"))
+			.toInstance(rb.getString("tree.version"));
 
 		binder.requestStaticInjection(CommentFeed.class);
 	}

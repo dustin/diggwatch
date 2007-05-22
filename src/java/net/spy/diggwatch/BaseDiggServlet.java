@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.name.Named;
 
 import net.spy.digg.Event;
 import net.spy.jwebkit.xml.XMLOutputServlet;
@@ -23,8 +24,8 @@ import net.spy.jwebkit.xml.XMLOutputServlet;
  */
 public abstract class BaseDiggServlet extends XMLOutputServlet {
 
-	@Inject
-	protected DiggInterface di;
+	protected @Inject DiggInterface di;
+	protected @Inject @Named("tree.version") String treeVersion;
 
 	private String etagBase=null;
 
@@ -40,7 +41,7 @@ public abstract class BaseDiggServlet extends XMLOutputServlet {
 	    }
 	    injector.injectMembers(this);
 
-	    etagBase=String.valueOf(System.currentTimeMillis());
+        etagBase = treeVersion.split(" ")[0];
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public abstract class BaseDiggServlet extends XMLOutputServlet {
 				if(eTag == null) {
 					processPath(path, req, res);
 				} else {
-					eTag = etagBase + "." + eTag;
+					eTag = etagBase + "-" + eTag;
 					if(eTags.contains(eTag)) {
 						res.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 					} else {
