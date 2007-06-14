@@ -6,7 +6,7 @@
 
 <html>
 	<head>
-		<title>Diggwatcher - comments for <c:out value="${username}"/></title>
+		<title>Diggwatch - comments for <c:out value="${username}"/></title>
 		<link rel="stylesheet" href="/diggwatch/style.css"/>
 		<link rel="alternate" type="application/rss+xml"
 		   href="/diggwatch/rss/comments/<c:out value='${username}'/>"

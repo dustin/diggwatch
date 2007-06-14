@@ -7,7 +7,7 @@
 <html>
 	<head>
 		<title>
-			Diggwatcher - comments by friends of <c:out value="${username}"/>
+			Diggwatch - comments by friends of <c:out value="${username}"/>
 		</title>
 		<link rel="stylesheet" href="/diggwatch/style.css"/>
 		<link rel="alternate" type="application/rss+xml"

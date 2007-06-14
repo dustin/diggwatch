@@ -7,7 +7,7 @@
 <html>
 	<head>
 		<title>
-			Diggwatcher - comments on articles from <c:out value="${domain}"/>
+			Diggwatch - comments on articles from <c:out value="${domain}"/>
 		</title>
 		<link rel="stylesheet" href="/diggwatch/style.css"/>
 		<link rel="alternate" type="application/rss+xml"

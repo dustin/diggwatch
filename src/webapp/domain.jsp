@@ -8,7 +8,7 @@
 <html>
 	<head>
 		<title>
-			Diggwatcher - stories from <c:out value="${domain}"/>
+			Diggwatch - stories from <c:out value="${domain}"/>
 		</title>
 		<link rel="stylesheet" href="/diggwatch/style.css"/>
 		<link rel="alternate" type="application/rss+xml"

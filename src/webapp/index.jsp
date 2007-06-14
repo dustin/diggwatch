@@ -6,7 +6,7 @@
 
 <html>
 	<head>
-		<title>Diggwatcher</title>
+		<title>Diggwatch</title>
 		<link rel="stylesheet" href="/diggwatch/style.css"/>
 	</head>
 	<body id="index">
