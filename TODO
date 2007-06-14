@@ -1,5 +1,3 @@
 * Try to categorize and cache all comments (incrementally).
 * Add other feed types:
   * Diggs by domain.
-  * Comments by domain.
-  * Comments by friends.
