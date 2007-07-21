@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.google.inject.Inject;
@@ -318,15 +319,27 @@ public class DiggInterface extends SpyObject {
 		Collection<Comment> rv=null;
 		try {
 			Story story=getStory(c.getStoryId());
-			int repId=c.getReplyId() == null ? c.getEventId() : c.getReplyId();
 			String key="digg/comments/replies/" + c.getStoryId() + "."
-			+ story.getComments() + "/" + repId;
+				+ story.getComments() + "/" + c.getEventId();
 			@SuppressWarnings("unchecked") // parameterized cast
 			Collection<Comment> cached=(Collection<Comment>) mc.get(key);
 			if(cached == null) {
 				EventParameters ep=new EventParameters();
 				ep.setCount(PagingParameters.MAX_COUNT);
-				cached=digg.getCommentReplies(c.getStoryId(), repId, ep);
+				ArrayList<Comment> tmp=new ArrayList<Comment>();
+				tmp.addAll(digg.getCommentReplies(c.getStoryId(),
+						c.getEventId(), ep));
+				if(c.getReplyId() != null) {
+					tmp.addAll(digg.getCommentReplies(c.getStoryId(),
+						c.getReplyId(), ep));
+				}
+				// There may be duplicates due to the sloppy fetching
+				// de-duplicate
+				Map<Integer, Comment> m=new TreeMap<Integer, Comment>();
+				for(Comment found : tmp) {
+					m.put(found.getEventId(), found);
+				}
+				cached=new ArrayList<Comment>(m.values());
 				mc.set(key, COMMENT_REPLY_TIME, cached);
 			}
 			// Filter it since we cache all of them.
