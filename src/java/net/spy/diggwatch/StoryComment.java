@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.spy.diggwatch;
 
@@ -12,7 +12,7 @@ import net.spy.digg.Story;
 public class StoryComment {
 	private Story story=null;
 	private Comment comment=null;
-	private String iconUrl;
+	private final String iconUrl;
 	public StoryComment(Story s, Comment c, String url) {
 		super();
 		assert s != null;
@@ -37,9 +37,9 @@ public class StoryComment {
 	public String getParentLink() {
 		int repId=comment.getReplyId() == null
 			? comment.getEventId() : comment.getReplyId();
-		return story.getDiggLink() + "#c" + repId;
+		return story.getDiggLink() + "/all#c" + repId;
 	}
 	public String getCommentLink() {
-		return story.getDiggLink() + "#c" + comment.getEventId();
+		return story.getDiggLink() + "/all#c" + comment.getEventId();
 	}
 }

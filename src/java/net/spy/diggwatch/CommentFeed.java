@@ -90,7 +90,7 @@ public class CommentFeed extends RSSChannel {
 		}
 
 		public String getLink() {
-			return story.getDiggLink() + "#c" + comment.getEventId();
+			return story.getDiggLink() + "/all#c" + comment.getEventId();
 		}
 
 		public Date getPubDate() {
@@ -111,6 +111,6 @@ public class CommentFeed extends RSSChannel {
 			}
 			return rv;
 		}
-		
+
 	}
 }
