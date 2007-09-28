@@ -89,7 +89,7 @@ public abstract class BaseDiggServlet extends XMLOutputServlet {
 		String rv="0";
 		if(!events.isEmpty()) {
 			Event event=events.iterator().next();
-			rv=(event.getTimestamp() / 1000) + "-" + event.getEventId();
+			rv=event.getTimestamp() / 1000 + "-" + event.getEventId();
 		}
 		return rv;
 	}

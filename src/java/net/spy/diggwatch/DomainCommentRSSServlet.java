@@ -55,6 +55,6 @@ public class DomainCommentRSSServlet extends BaseDiggServlet {
 				+ ")";
 			return rv;
 		}
-		
+
 	}
 }

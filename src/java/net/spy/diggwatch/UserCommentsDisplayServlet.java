@@ -53,7 +53,7 @@ public class UserCommentsDisplayServlet extends BaseDiggServlet {
 	}
 
 	public static class UStoryComment extends StoryComment {
-		private boolean isCurrentUser;
+		private final boolean isCurrentUser;
 
 		public UStoryComment(Story s, Comment c, String icon,
 				boolean currentUser) {
