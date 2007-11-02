@@ -12,8 +12,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.google.inject.Inject;
-
 import net.spy.SpyObject;
 import net.spy.digg.Comment;
 import net.spy.digg.Digg;
@@ -27,6 +25,8 @@ import net.spy.digg.User;
 import net.spy.digg.UserParameters;
 import net.spy.memcached.MemcachedClient;
 
+import com.google.inject.Inject;
+
 /**
  * Interface to digg.
  */
@@ -34,7 +34,7 @@ public class DiggInterface extends SpyObject {
 
 	// How long to cache user comments.
 	private static final int USER_COMMENTS_TIME = 60;
-	// How many comemnts to fetch for a user.
+	// How many comments to fetch for a user.
 	private static final int NUM_USER_COMMENTS = 20;
 	// How long stories are cached.
 	private static final int STORY_TIME = 300;
