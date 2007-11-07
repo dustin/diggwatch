@@ -31,7 +31,8 @@ end
 runtime_jars=[m1("spy:spy:jar:2.4"), m1("spy:jwebkit:jar:3.1"),
   m1("spy:memcached:jar:2.0-pre5"), m1("spy:digg:jar:1.2"),
   m1("spy:xmlkit:jar:2.2.3"), m1("google:guice:jar:1.0"),
-  m1("google:guice-servlet:jar:1.0")]
+  m1("google:guice-servlet:jar:1.0"),
+  "taglibs:standard:jar:1.1.2", "jstl:jstl:jar:1.1.2"]
 buildtime_jars=runtime_jars + ["servletapi:servletapi:jar:2.4"]
 
 desc "The Diggwatch project"
