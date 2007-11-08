@@ -9,6 +9,19 @@ COPYRIGHT = "2007  Dustin Sallings"
 
 # Specify Maven 2.0 remote repositories here, like this:
 repositories.remote << "http://www.ibiblio.org/maven2/"
+repositories.remote << "http://bleu.west.spy.net/~dustin/m2repo/"
+
+plugins=[
+  'spy:m1compat:rake:1.0',
+  'spy:hg_tree_version:rake:1.0',
+]
+
+plugins.each do |spec|
+  artifact(spec).tap do |plugin|
+    plugin.invoke
+    load plugin.name
+  end
+end
 
 desc "The Diggwatch project"
 define "diggwatch" do
