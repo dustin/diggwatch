@@ -23,9 +23,7 @@ def m1(parts)
   group, id, type, version = parts.split /:/
 
   url=SPY_REPO + "#{group}/#{type}s/#{id}-#{version}.#{type}"
-  rv=artifact(parts)
-  download(rv => url)
-  rv
+  download(artifact(parts) => url)
 end
 
 runtime_jars=[m1("spy:spy:jar:2.4"), m1("spy:jwebkit:jar:3.1"),
