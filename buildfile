@@ -18,11 +18,11 @@ if not $?.success?
 end
 puts "Tree version is #{TREE_VER}"
 
-# m1 artifact
-def m1(parts)
+# Obtain an artifact from a maven 1 repository.
+def m1(parts, repo_url=SPY_REPO)
   group, id, type, version = parts.split /:/
 
-  url=SPY_REPO + "#{group}/#{type}s/#{id}-#{version}.#{type}"
+  url="#{repo_url}#{group}/#{type}s/#{id}-#{version}.#{type}"
   download(artifact(parts) => url)
 end
 
