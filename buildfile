@@ -4,7 +4,7 @@ VERSION_NUMBER = "1.0"
 # Version number for the next release
 NEXT_VERSION = "1.0"
 # Group identifier for your projects
-GROUP = "diggwatch"
+GROUP = "spy"
 COPYRIGHT = "2007  Dustin Sallings"
 
 # Specify Maven 2.0 remote repositories here, like this:
