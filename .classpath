@@ -10,7 +10,7 @@
   <classpathentry kind="var" path="M2_REPO/servletapi/servletapi/2.4/servletapi-2.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/spy/digg/1.2/digg-1.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/spy/jwebkit/3.1/jwebkit-3.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/spy/memcached/2.0-pre5/memcached-2.0-pre5.jar"/>
+  <classpathentry kind="var" path="M2_REPO/spy/memcached/2.0-pre6/memcached-2.0-pre6.jar"/>
   <classpathentry kind="var" path="M2_REPO/spy/spy/2.4/spy-2.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/spy/xmlkit/2.2.3/xmlkit-2.2.3.jar"/>
   <classpathentry kind="var" path="M2_REPO/taglibs/standard/1.1.2/standard-1.1.2.jar"/>
