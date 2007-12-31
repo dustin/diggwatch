@@ -44,5 +44,13 @@ define "diggwatch" do
   resources.filter.using "tree.version" => TREE_VER
 
   package(:war).with :libs => runtime_jars
+
+  desc "Ship the build"
+  define "ship" do
+    system "rsync", "-vaSe", "ssh", "target/diggwatch-#{VERSION_NUMBER}.war",
+      "basket.west.spy.net:/data/web/jboss/deploy/diggwatch.war"
+  end
+
 end
+
 # vim: syntax=ruby et ts=2
