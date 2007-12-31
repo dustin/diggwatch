@@ -48,7 +48,7 @@ define "diggwatch" do
   desc "Ship the build"
   define "ship" do
     system "rsync", "-vaSe", "ssh", "target/diggwatch-#{VERSION_NUMBER}.war",
-      "basket.west.spy.net:/data/web/jboss/deploy/diggwatch.war"
+      "red.west.spy.net:/data/web/jboss/deploy/diggwatch.war"
   end
 
 end
