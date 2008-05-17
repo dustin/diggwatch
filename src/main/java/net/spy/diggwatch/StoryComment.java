@@ -37,9 +37,11 @@ public class StoryComment {
 	public String getParentLink() {
 		int repId=comment.getReplyId() == null
 			? comment.getEventId() : comment.getReplyId();
-		return story.getDiggLink() + "/all#c" + repId;
+		return story.getDiggLink() + "/?t=" + comment.getRoot()
+			+ "#c" + repId;
 	}
 	public String getCommentLink() {
-		return story.getDiggLink() + "/all#c" + comment.getEventId();
+		return story.getDiggLink() + "/?t=" + comment.getRoot()
+			+ "#c" + comment.getEventId();
 	}
 }
