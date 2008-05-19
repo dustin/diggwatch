@@ -86,7 +86,7 @@ public class CommentFeed extends RSSChannel {
 		}
 
 		public String getGuid() {
-			return getLink();
+			return story.getDiggLink() + "/all#c" + comment.getEventId();
 		}
 
 		public String getLink() {
