@@ -36,8 +36,7 @@ public class ContextListener extends JWServletContextListener
 	@Override
 	protected void ctxInit(ServletContextEvent sce) throws Exception {
 		super.ctxInit(sce);
-		mc=new MemcachedClient(AddrUtil.getAddresses(
-			"red:11211 purple:11211"));
+		mc=new MemcachedClient(AddrUtil.getAddresses("red:11211"));
 
 		// Perform all of the injection.
 		Injector injector = Guice.createInjector(new ServletModule(), this);
