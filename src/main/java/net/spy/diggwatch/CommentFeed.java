@@ -18,8 +18,8 @@ public class CommentFeed extends RSSChannel {
 	public static final String BASE_URL
 		= "http://bleu.west.spy.net/diggwatch/";
 	// Path means either user or domain
-	protected String path=null;
-	private Collection<Comment> comments=null;
+	protected final String path;
+	private final Collection<Comment> comments;
 
 	@Inject
 	static DiggInterface di;

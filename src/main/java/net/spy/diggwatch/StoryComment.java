@@ -10,8 +10,8 @@ import net.spy.digg.Story;
  * A comment with a reference to a story.
  */
 public class StoryComment {
-	private Story story=null;
-	private Comment comment=null;
+	private final Story story;
+	private final Comment comment;
 	private final String iconUrl;
 	public StoryComment(Story s, Comment c, String url) {
 		super();
